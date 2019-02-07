@@ -23,6 +23,7 @@ window.onload = function() {
     var playerBag;
 	var catEnemies;
 	var bulletSnacks;
+	var bullet;
 	var bulletPaws;
 	var bulletTime = 0;
 	var keys;
@@ -66,6 +67,7 @@ window.onload = function() {
 		catEnemies = game.add.group();
 		catEnemies.enableBody = true;
 		catEnemies.physicsBodyType = Phaser.Physics.ARCADE;
+		catEnemies.createMultiple(100, 'cat', [0,1,2,3]);
 		catEnemies.setAll('outofBoundsKill', true);
 		catEnemies.setAll('checkWorldBounds', true);
 		
@@ -89,12 +91,11 @@ window.onload = function() {
 		
     }
     function createCat() {
-		var cat = catEnemies.create(game.rnd.integerInRange(200, 600), 0, 'cat');
+		var cat = catEnemies.getFirstExists(false);
+		cat.reset(game.rnd.integerInRange(200,600), 0)
 		cat.animations.add('move', [0,1,2,3], 5, true);
 		cat.play('move');
-		while(cat.y < 850) {
-			cat.y += 4;
-		}
+		cat.body.velocity.y = 2;
 		spawnTimer = game.time.now + 2000;
 		livingEnemies.push[cat];
 	}
