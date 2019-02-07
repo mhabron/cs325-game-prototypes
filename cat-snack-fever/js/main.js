@@ -23,6 +23,7 @@ window.onload = function() {
     var playerBag;
 	var catEnemies;
 	var bulletSnacks;
+	var bulletPaws;
 	var bulletTime = 0;
 	var keys;
 	var fireButton;
