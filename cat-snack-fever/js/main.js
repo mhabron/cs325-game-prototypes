@@ -103,10 +103,10 @@ window.onload = function() {
 		if (playerBag.alive) {
 			playerBag.body.velocity.setTo(0, 0);
 			if (keys.left.isDown) {
-				player.body.velocity.x = -200;
+				playerBag.body.velocity.x = -200;
 			}
 			else if (keys.right.isDown) {
-				player.body.velocity.x = 200;
+				playerBag.body.velocity.x = 200;
 			}
 
 			//  Firing?
