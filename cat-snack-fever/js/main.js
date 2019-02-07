@@ -95,7 +95,7 @@ window.onload = function() {
 		cat.reset(game.rnd.integerInRange(200,600), 0)
 		cat.animations.add('move', [0,1,2,3], 5, true);
 		cat.play('move');
-		cat.body.velocity.y = 2;
+		cat.body.velocity.y = 100;
 		spawnTimer = game.time.now + 2000;
 		livingEnemies.push[cat];
 	}
@@ -134,7 +134,6 @@ window.onload = function() {
 
 		//  Increase the score
 		score += 50;
-		scoreText.text = scoreString + score;
 	}
 
 	function enemyHitsPlayer (player,bullet) {
