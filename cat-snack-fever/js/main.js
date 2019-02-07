@@ -71,7 +71,7 @@ window.onload = function() {
 		createCat();
 		
 		scoreString = 'Score: ';
-		scoreText = game.add.text(10,10, scoreString + score, {font: '34px Arial', fill '#fff'});
+		game.add.text(10,10, scoreString + score, {font: '34px Arial', fill '#fff'});
 		
 		lives = game.add.group();
 		game.add.text(game.world.width - 100, 10, 'Lives: ', {font: '34px Arial', fill '#fff'});
