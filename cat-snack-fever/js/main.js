@@ -71,10 +71,10 @@ window.onload = function() {
 		createCat();
 		
 		scoreString = 'Score: ';
-		game.add.text(10,10, scoreString + score, {font: '34px Arial', fill '#fff'});
+		game.add.text(10,10, scoreString + score, {font: '34px Arial'});
 		
 		lives = game.add.group();
-		game.add.text(game.world.width - 100, 10, 'Lives: ', {font: '34px Arial', fill '#fff'});
+		game.add.text(game.world.width - 100, 10, 'Lives: ', {font: '34px Arial'});
 		
 		for (var i = 0; i < 3; i++) {
 			var bag = lives.create(game.world.width - 100 + (30 * i), 60, 'player');
