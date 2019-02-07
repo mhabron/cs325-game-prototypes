@@ -74,7 +74,7 @@ window.onload = function() {
 		createCat();
 		
 		scoreString = 'Score: ';
-		game.add.text(10,10, scoreString + score, {font: '34px Arial'});
+		scoreText = game.add.text(10,10, scoreString + score, {font: '34px Arial'});
 		
 		lives = game.add.group();
 		game.add.text(game.world.width - 100, 10, 'Lives: ', {font: '34px Arial'});
@@ -82,7 +82,7 @@ window.onload = function() {
 		for (var i = 0; i < 3; i++) {
 			var bag = lives.create(game.world.width - 100 + (30 * i), 60, 'player');
 			bag.anchor.setTo(0.5, 0.5);
-			bag.angle = 90;
+			bag.angle = 0;
 			bag.alpha = 0.4;
 		}
 		//  And some controls to play the game with
@@ -134,6 +134,7 @@ window.onload = function() {
 
 		//  Increase the score
 		score += 50;
+		scoreText.text = 'Score: ' + score
 	}
 
 	function enemyHitsPlayer (player,bullet) {
