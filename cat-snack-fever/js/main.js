@@ -89,7 +89,7 @@ window.onload = function() {
 		
     }
     function createCat() {
-		var cat = catEnemies.create(game.rnd.integerinRange(200, 600), 0, 'cat');
+		var cat = catEnemies.create(game.rnd.integerInRange(200, 600), 0, 'cat');
 		cat.animations.add('move', [0,1,2,3], 5, true);
 		cat.play('move');
 		while(cat.y < 850) {
@@ -102,10 +102,10 @@ window.onload = function() {
         background.tilePosition.y += 2;
 		if (playerBag.alive) {
 			playerBag.body.velocity.setTo(0, 0);
-			if (cursors.left.isDown) {
+			if (keys.left.isDown) {
 				player.body.velocity.x = -200;
 			}
-			else if (cursors.right.isDown) {
+			else if (keys.right.isDown) {
 				player.body.velocity.x = 200;
 			}
 
