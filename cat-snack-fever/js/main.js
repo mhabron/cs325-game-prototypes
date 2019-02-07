@@ -12,14 +12,15 @@ window.onload = function() {
     var PhaserGlobal;
     var game = new Phaser.Game( 800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update } );
     
+	//loads all necessary assets into the game.
     function preload() {
-        // Load an image and call it 'logo'.
         game.load.spritesheet( 'cat', 'assets/cat-enemy.png', 64, 64);
 		game.load.image( 'player', 'assets/treat-bag-player.png');
 		game.load.spritesheet( 'bullet', 'assets/snack-bullet.png', 64, 64);
 		game.load.spritesheet( 'enemyBullet', 'assets/paw-enemy-bullet-small.png', 64, 64);
 		game.load.image('background', 'assets/background.png');
 		game.load.audio('neko', 'assets/01 - Mitchiri-Neko March.mp3');
+		game.load.audio('meow', 'assets/cat-meowing.mp3');
     }
     var playerBag;
 	var catEnemies;
@@ -39,9 +40,10 @@ window.onload = function() {
 	var firingTimer = 0;
 	var spawnTimer = 0;
 	var music;
+	var soundfx;
 	var livingEnemies = [];
 	
-    //mostly borrowed form the "Invaders" example.
+    //mostly borrowed/modified from the "Invaders" example.
     function create() {
 		background = game.add.tileSprite(0, 0, 800, 600, 'background');
 		
@@ -79,10 +81,11 @@ window.onload = function() {
 		music.loop = true;
 		
 		
-		//instead of creating a bunch of aliens like in "Invaders", randomly
+		//instead of creating a bunch of aliens like in "Invader", randomly
 		//generates a cat enemy somewhere at the top of the screen.
 		createCat();
 		
+		//creates the score counter at the top left corner.
 		scoreString = 'Score: ';
 		scoreText = game.add.text(10,10, scoreString + score, {font: '34px Arial'});
 		
@@ -103,7 +106,7 @@ window.onload = function() {
 		
     }
 	
-	//original function to create a cata enemy at the top of the screen.
+	//original function to create a cat enemy at the top of the screen.
     function createCat() {
 		var cat = catEnemies.getFirstExists(false);
 		cat.reset(game.rnd.integerInRange(200,600), 0)
@@ -114,9 +117,11 @@ window.onload = function() {
 		livingEnemies.push[cat];
 	}
     function update() {
+		//scrolls the background
         background.tilePosition.y += 2;
 		if (playerBag.alive) {
 			playerBag.body.velocity.setTo(0, 0);
+			//enables movement when arrow keys are pressed.
 			if (keys.left.isDown) {
 				playerBag.body.velocity.x = -200;
 			}
@@ -128,31 +133,32 @@ window.onload = function() {
 			if (fireButton.isDown) {
 				fireBullet();
 			}
+			//creates another cat enemy if the game time now aligns with the set timer.
 			if (game.time.now > spawnTimer) {
 				createCat();
-			}
-			if (game.time.now > firingTimer) {
-				enemyFires();
 			}
 			//  Run collision
 			game.physics.arcade.overlap(bulletSnacks, catEnemies, collisionHandler, null, this);
 			game.physics.arcade.overlap(catEnemies, playerBag, enemyHitsPlayer, null, this);
 		}
     }
+	
+	//collision handler for when a bullet hits a cat.
 	function collisionHandler (bullet, cat) {
 
-		//  When a bullet hits an alien we kill them both
 		bullet.kill();
 		cat.kill();
-
-		//  Increase the score
+        soundfx = game.add.audio('meow');
+		soundfx.play();
 		score += 50;
 		scoreText.text = 'Score: ' + score
 	}
-
+    
+	//collision handler for when a cat hits the player. Borrowed/modified from "Invader".
 	function enemyHitsPlayer (player,cat) {
 		cat.kill();
-
+        soundfx = game.add.audio('meow');
+		soundfx.play();
 		live = lives.getFirstAlive();
 
 		if (live) {
@@ -174,30 +180,11 @@ window.onload = function() {
 		}
 	}
 	
-	function enemyFires () {
-		//  Grab the first bullet we can from the pool
-		enemyBullet = bulletPaws.getFirstExists(false);
-		if (enemyBullet && livingEnemies.length > 0) {
-        
-			var random=game.rnd.integerInRange(0,livingEnemies.length-1);
-
-			// randomly select one of them
-			var shooter=livingEnemies[random];
-			// And fire the bullet from this enemy
-			enemyBullet.reset(shooter.body.x, shooter.body.y);
-
-			game.physics.arcade.moveToObject(enemyBullet,playerBag,120);
-			firingTimer = game.time.now + 1500;
-		}
-	}
-	
+	//function for firing a bullet from the player. Borrowed/modified from "Invader".
 	function fireBullet () {
-		//  To avoid them being allowed to fire too fast we set a time limit
 		if (game.time.now > bulletTime) {
-			//  Grab the first bullet we can from the pool
 			bullet = bulletSnacks.getFirstExists(false);
 			if (bullet) {
-				//  And fire it
 				bullet.reset(playerBag.x, playerBag.y + 8);
 				bullet.body.velocity.y = -400;
 				bulletTime = game.time.now + 200;
@@ -205,10 +192,12 @@ window.onload = function() {
 		}
 	}
 	
+	//erases a bullet if it goes out of bounds.
 	function resetBullet(bullet) {
 		bullet.kill();
 	}
 	
+	//erases a cat if it goes out of bounds.
 	function resetCat(cat) {
 		livingEnemies.pop(cat);
 		cat.kill();
