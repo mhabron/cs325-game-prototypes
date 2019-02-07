@@ -33,6 +33,7 @@ window.onload = function() {
 	var scoreString = '';
 	var scoreText;
 	var lives;
+	var live;
 	var enemyBullet;
 	var background;
 	var firingTimer = 0;
@@ -159,10 +160,16 @@ window.onload = function() {
 
     // When the player dies
 		if (lives.countLiving() < 1) {
-			player.kill();
+			playerBag.reset(400,500);
 			bulletPaws.callAll('kill');
 			score = 0;
 		    scoreText.text = 'Score: ' + score
+			for (var i = 0; i < 3; i++) {
+				var bag = lives.create(game.world.width - 100 + (30 * i), 60, 'player');
+				bag.anchor.setTo(0.5, 0.5);
+				bag.angle = 0;
+				bag.alpha = 0.4;
+			}
 		}
 	}
 	
