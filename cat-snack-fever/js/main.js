@@ -14,36 +14,180 @@ window.onload = function() {
     
     function preload() {
         // Load an image and call it 'logo'.
-        game.load.image( 'logo', 'assets/phaser.png' );
+        game.load.spritesheet( 'cat', 'assets/cat-enemy.png', 64, 64);
+		game.load.image( 'player', 'assets/treat-bag-player.png');
+		game.load.spritesheet( 'bullet', 'assets/snack-bullet.png', 64, 64);
+		game.load.spritesheet( 'enemyBullet', 'assets/paw-enemy-bullet-small.png', 64, 64);
+		game.load.image('background', 'assets/background.png');
     }
-    
-    var bouncy;
+    var playerBag;
+	var catEnemies;
+	var bulletSnacks;
+	var bulletTime = 0;
+	var keys;
+	var fireButton;
+	var score = 0;
+	var scoreString = '';
+	var scoreText;
+	var lives;
+	var enemyBullet;
+	var background;
+	var firingTimer = 0;
+	var spawnTimer = 0;
+	var livingEnemies = [];
+	
     
     function create() {
-        // Create a sprite at the center of the screen using the 'logo' image.
-        bouncy = game.add.sprite( game.world.centerX, game.world.centerY, 'logo' );
-        // Anchor the sprite at its center, as opposed to its top-left corner.
-        // so it will be truly centered.
-        bouncy.anchor.setTo( 0.5, 0.5 );
-        
-        // Turn on the arcade physics engine for this sprite.
-        game.physics.enable( bouncy, Phaser.Physics.ARCADE );
-        // Make it bounce off of the world bounds.
-        bouncy.body.collideWorldBounds = true;
-        
-        // Add some text using a CSS style.
-        // Center it in X, and position its top 15 pixels from the top of the world.
-        var style = { font: "25px Verdana", fill: "#9999ff", align: "center" };
-        var text = game.add.text( game.world.centerX, 15, "Build something amazing.", style );
-        text.anchor.setTo( 0.5, 0.0 );
+		background = game.add.tileSprite(0, 0, 800, 600, 'background');
+		
+		bulletSnacks = game.add.group();
+		bulletSnacks.enableBody = true;
+		bulletSnacks.physicsBodyType = Phaser.Physics.ARCADE;
+		bulletSnacks.createMultiple(20, 'bullet', [0,1]);
+		bulletSnacks.setAll('anchor.x', 0.5);
+		bulletSnacks.setAll('anchor.y', 1);
+		bulletSnacks.setAll('outOfBoundsKill', true);
+		bulletSnacks.setAll('checkWorldBounds', true);
+		
+		bulletPaws = game.add.group();
+		bulletPaws.enableBody = true;
+		bulletPaws.physicsBodyType = Phaser.Physics.ARCADE;
+		bulletPaws.createMultiple(20, 'enemyBullet', [0,1,2,3]);
+		bulletPaws.setAll('anchor.x', 0.5);
+		bulletPaws.setAll('anchor.y', 1);
+		bulletPaws.setAll('outOfBoundsKill', true);
+		bulletPaws.setAll('checkWorldBounds', true);
+		
+		playerBag = game.add.sprite(400, 500, 'player');
+		playerBag.anchor.setTo(0.5, 0.5);
+		game.physics.enable(playerBag, Phaser.Physics.ARCADE);
+		
+		catEnemies = game.add.group();
+		catEnemies.enableBody = true;
+		catEnemies.physicsBodyType = Phaser.Physics.ARCADE;
+		catEnemies.setAll('outofBoundsKill', true);
+		catEnemies.setAll('checkWorldBounds', true);
+		
+		createCat();
+		
+		scoreString = 'Score: ';
+		scoreText = game.add.text(10,10, scoreString + score, {font: '34px Arial', fill '#fff'});
+		
+		lives = game.add.group();
+		game.add.text(game.world.width - 100, 10, 'Lives: ', {font: '34px Arial', fill '#fff'});
+		
+		for (var i = 0; i < 3; i++) {
+			var bag = lives.create(game.world.width - 100 + (30 * i), 60, 'player');
+			bag.anchor.setTo(0.5, 0.5);
+			bag.angle = 90;
+			bag.alpha = 0.4;
+		}
+		//  And some controls to play the game with
+		keys = game.input.keyboard.createCursorKeys();
+		fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+		
     }
-    
+    function createCat() {
+		var cat = catEnemies.create(game.rnd.integerinRange(200, 600), 0, 'cat');
+		cat.animations.add('move', [0,1,2,3], 5, true);
+		cat.play('move');
+		while(cat.y < 850) {
+			cat.y += 4;
+		}
+		spawnTimer = game.time.now + 2000;
+		livingEnemies.push[cat];
+	}
     function update() {
-        // Accelerate the 'logo' sprite towards the cursor,
-        // accelerating at 500 pixels/second and moving no faster than 500 pixels/second
-        // in X or Y.
-        // This function returns the rotation angle that makes it visually match its
-        // new trajectory.
-        bouncy.rotation = game.physics.arcade.accelerateToPointer( bouncy, game.input.activePointer, 500, 500, 500 );
+        background.tilePosition.y += 2;
+		if (playerBag.alive) {
+			playerBag.body.velocity.setTo(0, 0);
+			if (cursors.left.isDown) {
+				player.body.velocity.x = -200;
+			}
+			else if (cursors.right.isDown) {
+				player.body.velocity.x = 200;
+			}
+
+			//  Firing?
+			if (fireButton.isDown) {
+				fireBullet();
+			}
+
+			if (game.time.now > firingTimer) {
+				enemyFires();
+			}
+			if (game.time.now > spawnTimer) {
+				createCat();
+			}
+			//  Run collision
+			game.physics.arcade.overlap(bulletSnacks, catEnemies, collisionHandler, null, this);
+			game.physics.arcade.overlap(bulletPaws, playerBag, enemyHitsPlayer, null, this);
+		}
     }
+	function collisionHandler (bullet, cat) {
+
+		//  When a bullet hits an alien we kill them both
+		bullet.kill();
+		cat.kill();
+
+		//  Increase the score
+		score += 50;
+		scoreText.text = scoreString + score;
+	}
+
+	function enemyHitsPlayer (player,bullet) {
+		bullet.kill();
+
+		live = lives.getFirstAlive();
+
+		if (live) {
+			live.kill();
+		}
+
+    // When the player dies
+		if (lives.countLiving() < 1) {
+			player.kill();
+			bulletPaws.callAll('kill');
+		}
+	}
+	
+	function enemyFires () {
+		//  Grab the first bullet we can from the pool
+		enemyBullet = bulletPaws.getFirstExists(false);
+		if (enemyBullet && livingEnemies.length > 0) {
+        
+			var random=game.rnd.integerInRange(0,livingEnemies.length-1);
+
+			// randomly select one of them
+			var shooter=livingEnemies[random];
+			// And fire the bullet from this enemy
+			enemyBullet.reset(shooter.body.x, shooter.body.y);
+
+			game.physics.arcade.moveToObject(enemyBullet,playerBag,120);
+			firingTimer = game.time.now + 1500;
+		}
+	}
+	
+	function fireBullet () {
+		//  To avoid them being allowed to fire too fast we set a time limit
+		if (game.time.now > bulletTime) {
+			//  Grab the first bullet we can from the pool
+			bullet = bulletSnacks.getFirstExists(false);
+			if (bullet) {
+				//  And fire it
+				bullet.reset(playerBag.x, playerBag.y + 8);
+				bullet.body.velocity.y = -400;
+				bulletTime = game.time.now + 200;
+			}
+		}
+	}
+	
+	function resetBullet(bullet) {
+		bullet.kill();
+	}
+	
+	function resetCat(cat) {
+		livingEnemies.pop(cat);
+		cat.kill();
+	}
 };
