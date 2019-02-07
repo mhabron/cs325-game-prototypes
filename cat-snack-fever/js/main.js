@@ -19,6 +19,7 @@ window.onload = function() {
 		game.load.spritesheet( 'bullet', 'assets/snack-bullet.png', 64, 64);
 		game.load.spritesheet( 'enemyBullet', 'assets/paw-enemy-bullet-small.png', 64, 64);
 		game.load.image('background', 'assets/background.png');
+		game.load.audio('neko', 'assets/01 - Mitchiri-Neko March.mp3');
     }
     var playerBag;
 	var catEnemies;
@@ -36,9 +37,10 @@ window.onload = function() {
 	var background;
 	var firingTimer = 0;
 	var spawnTimer = 0;
+	var music;
 	var livingEnemies = [];
 	
-    
+    //mostly borrowed form the "Invaders" example.
     function create() {
 		background = game.add.tileSprite(0, 0, 800, 600, 'background');
 		
@@ -71,6 +73,12 @@ window.onload = function() {
 		catEnemies.setAll('outofBoundsKill', true);
 		catEnemies.setAll('checkWorldBounds', true);
 		
+		music = game.add.audio('neko');
+		music.play(true);
+		
+		
+		//instead of creating a bunch of aliens like in "Invaders", randomly
+		//generates a cat enemy somewhere at the top of the screen.
 		createCat();
 		
 		scoreString = 'Score: ';
@@ -79,17 +87,21 @@ window.onload = function() {
 		lives = game.add.group();
 		game.add.text(game.world.width - 100, 10, 'Lives: ', {font: '34px Arial'});
 		
+		
+		//creates the lives counter at the top right corner.
 		for (var i = 0; i < 3; i++) {
 			var bag = lives.create(game.world.width - 100 + (30 * i), 60, 'player');
 			bag.anchor.setTo(0.5, 0.5);
 			bag.angle = 0;
 			bag.alpha = 0.4;
 		}
-		//  And some controls to play the game with
+		//  Adds some controls to play the game with
 		keys = game.input.keyboard.createCursorKeys();
 		fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 		
     }
+	
+	//original function to create a cata enemy at the top of the screen.
     function createCat() {
 		var cat = catEnemies.getFirstExists(false);
 		cat.reset(game.rnd.integerInRange(200,600), 0)
@@ -114,16 +126,15 @@ window.onload = function() {
 			if (fireButton.isDown) {
 				fireBullet();
 			}
-
-			if (game.time.now > firingTimer) {
-				enemyFires();
-			}
 			if (game.time.now > spawnTimer) {
 				createCat();
 			}
+			if (game.time.now > firingTimer) {
+				enemyFires();
+			}
 			//  Run collision
 			game.physics.arcade.overlap(bulletSnacks, catEnemies, collisionHandler, null, this);
-			game.physics.arcade.overlap(bulletPaws, playerBag, enemyHitsPlayer, null, this);
+			game.physics.arcade.overlap(catEnemies, playerBag, enemyHitsPlayer, null, this);
 		}
     }
 	function collisionHandler (bullet, cat) {
@@ -137,8 +148,8 @@ window.onload = function() {
 		scoreText.text = 'Score: ' + score
 	}
 
-	function enemyHitsPlayer (player,bullet) {
-		bullet.kill();
+	function enemyHitsPlayer (player,cat) {
+		cat.kill();
 
 		live = lives.getFirstAlive();
 
@@ -150,6 +161,8 @@ window.onload = function() {
 		if (lives.countLiving() < 1) {
 			player.kill();
 			bulletPaws.callAll('kill');
+			score = 0;
+		    scoreText.text = 'Score: ' + score
 		}
 	}
 	
