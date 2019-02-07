@@ -75,7 +75,8 @@ window.onload = function() {
 		catEnemies.setAll('checkWorldBounds', true);
 		
 		music = game.add.audio('neko');
-		music.play(true);
+		music.play();
+		music.loop = true;
 		
 		
 		//instead of creating a bunch of aliens like in "Invaders", randomly
