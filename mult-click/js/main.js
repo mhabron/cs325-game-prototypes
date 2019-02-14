@@ -152,7 +152,7 @@ window.onload = function() {
 	}
 	function wrongSlimeClicked() {
 		timeLimit -= 60;
-		soundfxOnen= game.add.audio('splat');
+		soundfxOne = game.add.audio('wrong');
 		soundfxOne.play();
 	}
 	function rightSlimeClicked() {
@@ -164,7 +164,7 @@ window.onload = function() {
 			playerTwoScore += 1;
 			playerTwoText.text = playerTwoScoreString + playerTwoScore;
 		}
-		soundfxTwo = game.add.audio('wrong');
+		soundfxTwo = game.add.audio('splat');
 		soundfxTwo.play();
 		rightSlimeCreated = false;
 		slimes.destroy(true,true);
