@@ -151,7 +151,7 @@ window.onload = function() {
         soundfx = game.add.audio('meow');
 		soundfx.play();
 		score += 50;
-		scoreText.text = 'Score: ' + score
+		scoreText.text = 'Score: ' + score;
 	}
     
 	//collision handler for when a cat hits the player. Borrowed/modified from "Invader".
