@@ -28,19 +28,16 @@ GameStates.makeGame = function( game, shared ) {
 	
 	var background;
 	
-	var boss;
-	var bossHealth = 1000;
-	var bossMaxHealth = 1000;
-	var bossActive = false;
-	
 	var score = 0;
 	var scoreText;
+	
+	var powerText;
 	var lives;
 	
 	var music;
 	var soundfx;
 	
-	var bossTime = 20000;
+	var bossScore = 20000;
 	
 	
     
@@ -81,37 +78,14 @@ GameStates.makeGame = function( game, shared ) {
 		demon.reset(game.rnd.integerInRange(100,500), -50);
 		demon.animations.add('move', [0,1], 7, true);
 		demon.play('move');
-		demon.body.velocity.y = 100;
-		spawnTimer = game.time.now + 2000;
-	}
-	
-	function createBoss() {
-		boss = game.add.sprite('boss', -200, 200);
-		boss.anchor.setTo(0.5, 0.5);
-		game.physics.enable(boss, Phaser.Physics.ARCADE);
-		boss.body.setSize(64, 64, 0, 0);
-		boss.animations.add('moveBoss', [0,1], 7, true);
-		boss.play('moveBoss');
-		while (boss.y < 200) {
-			boss.body.velocity.y = 100;
-		}
-		boss.body.velocity.y = 0;
-		bossActive = true;
-	}
-	
-	
-	function collisionBossHandler (bullet, boss) {
-		bossHealth -= powerLevel;
-		if(bossHealth <= 0) {
-			quitGame();
-		}
+		demon.body.velocity.y = 400;
+		spawnTimer = game.time.now + 1000;
 	}
 	
 	function powerUpCollisionHandler(playerAngel, powerUp) {
 		powerUp.kill();
 		powerLevel += 10;
-		score += 100;
-		scoreText.text = score;
+		powerText.text = "x" + powerLevel;
 		//soundfx = game.add.audio('meow');
 		//soundfx.play();
 	}
@@ -128,8 +102,8 @@ GameStates.makeGame = function( game, shared ) {
 		demon.kill();
         //soundfx = game.add.audio('meow');
 		//soundfx.play();
-		score += 50;
-		scoreText.text = score;
+		score += (50 * powerLevel);
+		scoreText.text = score + "/ " + bossScore;
 	}
 	
 	//collision handler for when a demon hits the player. Borrowed/modified from "Invader".
@@ -222,7 +196,7 @@ GameStates.makeGame = function( game, shared ) {
 			powerUps.setAll('outOfBoundsKill', true);
 			powerUps.setAll('checkWorldBounds', true);
 			
-			playerAngel = game.add.sprite(400, 400, 'angel');
+			playerAngel = game.add.sprite(400, 500, 'angel');
 			playerAngel.anchor.setTo(0.5, 0.5);
 			game.physics.enable(playerAngel, Phaser.Physics.ARCADE);
 			//playerAngel.body.setSize(16, 16, 0, 0);
@@ -241,7 +215,11 @@ GameStates.makeGame = function( game, shared ) {
 				life.alpha = 0.7;
 			}
 			
-			scoreText = game.add.text(game.world.width - 100,260, score, {font: '34px Impact'});
+			scoreText = game.add.text(game.world.width - 140,260, score + "/ " + bossScore, {font: '24px Impact'});
+			scoreText.addColor('#fff', 0);
+			
+			powerText = game.add.text(game.world.width - 100,400, "x" + powerLevel, {font: '34px Impact'});
+			powerText.addColor('#fff', 0);
 			
 			//  Adds some controls to play the game with
 			keys = game.input.keyboard.createCursorKeys();
@@ -267,11 +245,11 @@ GameStates.makeGame = function( game, shared ) {
 				fireBullet();
 			}
 			//creates another cat enemy if the game time now aligns with the set timer.
-			if (game.time.now > spawnTimer && game.time.now != bossTime) {
+			if (game.time.now > spawnTimer) {
 				createDemon();
 			}
-			if(game.time.now >= bossTime) {
-				createBoss();
+			if(score >= bossScore) {
+				quitGame();
 			}
 			//  Run collision
 			game.physics.arcade.overlap(playerBulletsOne, enemies, collisionHandler, null, this);
@@ -280,11 +258,6 @@ GameStates.makeGame = function( game, shared ) {
 			game.physics.arcade.overlap(playerBulletsFour, enemies, collisionHandler, null, this);
 			game.physics.arcade.overlap(enemies, playerAngel, enemyHitsPlayer, null, this);
 			game.physics.arcade.overlap(powerUps, playerAngel, powerUpCollisionHandler, null, this);
-			game.physics.arcade.overlap(playerBulletsOne, boss, collisionBossHandler, null, this);
-			game.physics.arcade.overlap(playerBulletsTwo, boss, collisionBossHandler, null, this);
-			game.physics.arcade.overlap(playerBulletsThree, boss, collisionBossHandler, null, this);
-			game.physics.arcade.overlap(playerBulletsFour, boss, collisionBossHandler, null, this);
-			
 			}
         }
     };
