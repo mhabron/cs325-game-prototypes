@@ -1,7 +1,7 @@
 "use strict";
 
 GameStates.makeGame = function( game, shared ) {
-    // Create your own variables.
+    // variables for various things needed in the game.
 	var playerAngel;
 	var live;
 	var bullet;
@@ -55,6 +55,8 @@ GameStates.makeGame = function( game, shared ) {
 
     }
 	
+	//fires a bullet from the player based on the player's current power level and whether or not
+	//enough time has passed since the last shot.
 	function fireBullet () {
 		if (game.time.now > bulletTime) {
 			if(powerLevel == 10) {
@@ -78,6 +80,7 @@ GameStates.makeGame = function( game, shared ) {
 		}
 	}
 	
+	//function to randomly create a demon past the top of the screen that rolls into view.
 	function createDemon() {
 		var demon = enemies.getFirstExists(false);
 		demon.reset(game.rnd.integerInRange(100,500), -50);
@@ -87,6 +90,7 @@ GameStates.makeGame = function( game, shared ) {
 		spawnTimer = game.time.now + 1000;
 	}
 	
+	//collision handler for collecting a powerup.
 	function powerUpCollisionHandler(playerAngel, powerUp) {
 		powerUp.kill();
 		powerLevel += 10;
@@ -94,7 +98,7 @@ GameStates.makeGame = function( game, shared ) {
 		soundfx3.play();
 	}
 	
-	//collision handler for when a bullet hits a cat.
+	//collision handler for when a bullet hits a demon. Borrowed/modified from "Invaders".
 	function collisionHandler (bullet, demon) {
 		var dropped = game.rnd.integerInRange(0,1);
 		if (dropped == 1 & powerLevel != 40) {
@@ -109,7 +113,7 @@ GameStates.makeGame = function( game, shared ) {
 		scoreText.text = score + "/ " + bossScore;
 	}
 	
-	//collision handler for when a demon hits the player. Borrowed/modified from "Invader".
+	//collision handler for when a demon hits the player. Borrowed/modified from "Invaders".
 	function enemyHitsPlayer (playerAngel,demon) {
 		demon.kill();
 		soundfx.play();
@@ -136,6 +140,7 @@ GameStates.makeGame = function( game, shared ) {
             // Create a sprite at the center of the screen using the 'logo' image.
             background = game.add.tileSprite(0,0,800,600,'game-background');
 			
+			//create groups for each tier of bullet, the enemies, the powerups, and the player.
             playerBulletsOne = game.add.group();
 			playerBulletsOne.enableBody = true;
 			playerBulletsOne.physicsBodyType = Phaser.Physics.ARCADE;
@@ -235,6 +240,7 @@ GameStates.makeGame = function( game, shared ) {
 			music.play();
 			music.loop = true;
 			
+			//add the various sound effects into the game.
 			soundfx = game.add.audio('hit');
 			soundfx2 = game.add.audio('poof');
 			soundfx3 = game.add.audio('power');
@@ -242,7 +248,9 @@ GameStates.makeGame = function( game, shared ) {
         },
     
         update: function () {
+			//scrolls the background.
 			background.tilePosition.y += 2;
+			//checks if player character is still alive.
 			if (playerAngel.alive) {
 				playerAngel.body.velocity.setTo(0, 0);
 			//enables movement when arrow keys are pressed.
@@ -257,7 +265,7 @@ GameStates.makeGame = function( game, shared ) {
 			if (fireButton.isDown) {
 				fireBullet();
 			}
-			//creates another cat enemy if the game time now aligns with the set timer.
+			//creates another demony enemy if the game time now aligns with the set timer.
 			if (game.time.now > spawnTimer) {
 				createDemon();
 			}
