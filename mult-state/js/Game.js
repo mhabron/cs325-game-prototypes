@@ -36,6 +36,9 @@ GameStates.makeGame = function( game, shared ) {
 	
 	var music;
 	var soundfx;
+	var soundfx2;
+	var soundfx3;
+	var soundfx4;
 	
 	var bossScore = 20000;
 	
@@ -47,6 +50,7 @@ GameStates.makeGame = function( game, shared ) {
         //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
 
         //  Then let's go back to the main menu.
+		music.stop();
         game.state.start('EndScreen');
 
     }
@@ -70,6 +74,7 @@ GameStates.makeGame = function( game, shared ) {
 				bullet.body.velocity.y = -400;
 				bulletTime = game.time.now + 200;
 			}
+			soundfx4.play();
 		}
 	}
 	
@@ -86,8 +91,7 @@ GameStates.makeGame = function( game, shared ) {
 		powerUp.kill();
 		powerLevel += 10;
 		powerText.text = "x" + powerLevel;
-		//soundfx = game.add.audio('meow');
-		//soundfx.play();
+		soundfx3.play();
 	}
 	
 	//collision handler for when a bullet hits a cat.
@@ -100,8 +104,7 @@ GameStates.makeGame = function( game, shared ) {
 		}
 		bullet.kill();
 		demon.kill();
-        //soundfx = game.add.audio('meow');
-		//soundfx.play();
+		soundfx2.play();
 		score += (50 * powerLevel);
 		scoreText.text = score + "/ " + bossScore;
 	}
@@ -109,7 +112,6 @@ GameStates.makeGame = function( game, shared ) {
 	//collision handler for when a demon hits the player. Borrowed/modified from "Invader".
 	function enemyHitsPlayer (playerAngel,demon) {
 		demon.kill();
-        soundfx = game.add.audio('meow');
 		soundfx.play();
 		live = lives.getFirstAlive();
 		if (live) {
@@ -215,9 +217,11 @@ GameStates.makeGame = function( game, shared ) {
 				life.alpha = 0.7;
 			}
 			
+			//creates a score counter on top of the pre-made GUI.
 			scoreText = game.add.text(game.world.width - 140,260, score + "/ " + bossScore, {font: '24px Impact'});
 			scoreText.addColor('#fff', 0);
 			
+			//creates a score multiplier on top of the pre-made GUI.
 			powerText = game.add.text(game.world.width - 100,400, "x" + powerLevel, {font: '34px Impact'});
 			powerText.addColor('#fff', 0);
 			
@@ -225,7 +229,16 @@ GameStates.makeGame = function( game, shared ) {
 			keys = game.input.keyboard.createCursorKeys();
 			fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 			
+			//spawns in a demon and starts the game music.
 			createDemon();
+			music = game.add.audio('gameMusic');
+			music.play();
+			music.loop = true;
+			
+			soundfx = game.add.audio('hit');
+			soundfx2 = game.add.audio('poof');
+			soundfx3 = game.add.audio('power');
+			soundfx4 = game.add.audio('shoot');
         },
     
         update: function () {

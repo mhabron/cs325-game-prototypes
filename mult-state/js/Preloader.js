@@ -12,19 +12,17 @@ GameStates.makePreloader = function( game ) {
     return {
     
         preload: function () {
-			
-            background = game.add.sprite(0, 0, 'preloader_background');
-            preloadBar = game.add.sprite(300, 400, 'preloader_bar');
-    
-            //	This sets the preloadBar sprite as a loader sprite.
-            //	What that does is automatically crop the sprite from 0 to full-width
-            //	as the files below are loaded in.
-            game.load.setPreloadSprite(preloadBar);
     
             //	Here we load the rest of the assets our game needs.
-            //	As this is just a Project Template I've not provided these assets, swap them for your own.
             game.load.image('titlePage', 'assets/title-background.png');
-            game.load.audio('titleMusic', ['assets/Poppers and Prosecco.mp3']);
+            game.load.audio('titleMusic', ['assets/Final_Fantasy_Prelude.mp3']);
+			game.load.audio('gameMusic', ['assets/Sky_Chase.mp3']);
+			game.load.audio('endMusic', ['assets/Final_Fantasy_Victory.mp3']);
+			
+			game.load.audio('poof', ['assets/enemy-poof.wav']);
+			game.load.audio('power', ['assets/ring-get.wav']);
+			game.load.audio('hit', ['assets/enemy-hits.wav']);
+			game.load.audio('shoot', ['assets/shot-sound.wav']);
             //	+ lots of other required assets here
 			game.load.spritesheet('angel', 'assets/player-angel.png', 64, 64);
 			game.load.image('bullet1', 'assets/angel-bullet1.png');
@@ -43,9 +41,7 @@ GameStates.makePreloader = function( game ) {
         },
     
         create: function () {
-    
-            //	Once the load has finished we disable the crop because we're going to sit in the update loop for a short while as the music decodes
-            preloadBar.cropEnabled = false;
+
     
         },
     

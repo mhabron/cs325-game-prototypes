@@ -2,16 +2,17 @@
 
 GameStates.makeEndScreen = function( game ) {
 	var endBackground;
+	var music;
 	
     return {
     
         create: function () {
     
-            //	We've already preloaded our assets, so let's kick right into the Main Menu itself.
-            //	Here all we're doing is playing some music and adding a picture and button
-            //	Naturally I expect you to do something significantly better :)
-    
+			//plays the ending music and creates the end screen background.
             endBackground = game.add.sprite(0, 0, 'end');
+			music = game.add.audio('endMusic');
+			music.play();
+			music.loop = true;
         },
     
         update: function () {
