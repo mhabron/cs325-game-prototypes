@@ -18,7 +18,6 @@ GameStates.makePreloader = function( game ) {
             game.load.audio('titleMusic', ['assets/Final_Fantasy_Prelude.mp3']);
 			game.load.audio('gameMusic', ['assets/Sky_Chase.mp3']);
 			game.load.audio('endMusic', ['assets/Final_Fantasy_Victory.mp3']);
-			
 			game.load.audio('poof', ['assets/enemy-poof.wav']);
 			game.load.audio('power', ['assets/ring-get.wav']);
 			game.load.audio('hit', ['assets/enemy-hits.wav']);
