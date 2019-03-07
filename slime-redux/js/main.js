@@ -75,7 +75,7 @@ window.onload = function() {
 		playerTwoText = game.add.text(game.world.width - 250, 10, playerTwoScoreString + playerTwoScore, {font: '34px Impact'});
 		playerTwoText.addColor('#fff', 0);
 		
-		timerText = game.add.text(game.world.centerX - 50, 10, 'Time Left: ' + Math.floor(timeLimit / 60), {font: '34px Impact'});
+		timerText = game.add.text(game.world.centerX - 60, 10, 'Time Left: ' + Math.floor(timeLimit / 60), {font: '34px Impact'});
 		timerText.addColor('#fff', 0);
 		timerActive = true;
 		music = game.add.audio('bgm');
@@ -175,7 +175,7 @@ window.onload = function() {
 		if(searchSlime != null) {
 			searchSlime.destroy();
 		}
-		if (chooseSlime == 0) {
+		if (chooseSlimeNum == 0) {
 			searchSlime = game.add.sprite(game.world.centerX + 100, game.world.centerY + 200, 'light-blue');
 			searchSlimeString  = 'light-blue';
 			wrongSlimeOne = 'dark-blue';
@@ -183,7 +183,7 @@ window.onload = function() {
 			wrongSlimeThree = 'green';
 			wrongSlimeFour = 'yellow';
 		}
-		else if (chooseSlime == 1) {
+		else if (chooseSlimeNum == 1) {
 			searchSlime = game.add.sprite(game.world.centerX + 100, game.world.centerY + 200, 'dark-blue');
 			searchSlimeString  = 'dark-blue';
 			wrongSlimeOne = 'light-blue';
@@ -191,7 +191,7 @@ window.onload = function() {
 			wrongSlimeThree = 'green';
 			wrongSlimeFour = 'yellow';
 		}
-		else if (chooseSlime == 2) {
+		else if (chooseSlimeNum == 2) {
 			searchSlime = game.add.sprite(game.world.centerX + 100, game.world.centerY + 200, 'red');
 			searchSlimeString  = 'red';
 			wrongSlimeOne = 'light-blue';
@@ -199,7 +199,7 @@ window.onload = function() {
 			wrongSlimeThree = 'green';
 			wrongSlimeFour = 'yellow';
 		}
-		else if (chooseSlime == 3) {
+		else if (chooseSlimeNum == 3) {
 			searchSlime = game.add.sprite(game.world.centerX + 100, game.world.centerY + 200, 'green');
 			searchSlimeString  = 'green';
 			wrongSlimeOne = 'light-blue';
