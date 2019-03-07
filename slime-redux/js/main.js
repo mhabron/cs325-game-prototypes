@@ -69,7 +69,7 @@ window.onload = function() {
 		chooseSlime();
 		game.time.events.add(Phaser.Timer.SECOND * 4, createSlimes, this);
 		game.time.events.add(Phaser.Timer.SECOND * 4, setTimer, this);
-		slimeFrame = game.add.sprite(game.world.centerX + 95, game.world.centerY + 190, 'frame');
+		slimeFrame = game.add.sprite(game.world.centerX + 95, game.world.centerY + 195, 'frame');
 		
 		slimes.onChildInputDown.add(wrongSlimeClicked, this);
 		rightSlimes.onChildInputDown.add(rightSlimeClicked, this);
@@ -333,7 +333,7 @@ window.onload = function() {
 		lookForText.addColor('#fff', 0);
 		playerOneActive = true;
 		finalRound = false;
-		slimeFrame = game.add.sprite(game.world.centerX + 95, game.world.centerY + 190, 'frame');
+		slimeFrame = game.add.sprite(game.world.centerX + 95, game.world.centerY + 195, 'frame');
 		rightSlimeCreated = false;
 		game.time.events.add(Phaser.Timer.SECOND * 4, createSlimes, this);
 		game.time.events.add(Phaser.Timer.SECOND * 4, setTimer, this);
