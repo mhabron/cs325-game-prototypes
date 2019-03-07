@@ -216,6 +216,7 @@ window.onload = function() {
 		}
 		else {
 			lookForText.destroy();
+			slimeFrame.destroy();
 			if (playerOneScore > playerTwoScore) {
 				lookForText = game.add.text(game.world.centerX - 100, game.world.centerY - 50, 'Times Up! P1 Wins!', {font: '34px Impact'});
 				lookForText.addColor('#fff', 0);
@@ -322,11 +323,12 @@ window.onload = function() {
 		timerText.text = "Time Left: " + Math.floor(timeLimit/60);
 		playerOneText.text = playerOneScoreString + playerOneScore;
 		playerTwoText.text = playerTwoScoreString + playerTwoScore;
-		lookForText.text = 'P1, Look for: ';
+		lookForText.destroy();
+		lookForText = game.add.text(game.world.centerX - 100, game.world.centerY + 200, 'P1, Look for: ', {font: '34px Impact'});
 		lookForText.addColor('#fff', 0);
 		playerOneActive = true;
 		finalRound = false;
-		
+		slimeFrame = game.add.sprite(game.world.centerX + 100, game.world.centerY + 200, 'frame');
 		rightSlimeCreated = false;
 		game.time.events.add(Phaser.Timer.SECOND * 4, createSlimes, this);
 		game.time.events.add(Phaser.Timer.SECOND * 4, setTimer, this);
