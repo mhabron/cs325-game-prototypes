@@ -69,7 +69,7 @@ window.onload = function() {
 		chooseSlime();
 		game.time.events.add(Phaser.Timer.SECOND * 4, createSlimes, this);
 		game.time.events.add(Phaser.Timer.SECOND * 4, setTimer, this);
-		slimeFrame = game.add.sprite(game.world.centerX + 100, game.world.centerY + 200, 'frame');
+		slimeFrame = game.add.sprite(game.world.centerX + 95, game.world.centerY + 190, 'frame');
 		
 		slimes.onChildInputDown.add(wrongSlimeClicked, this);
 		rightSlimes.onChildInputDown.add(rightSlimeClicked, this);
@@ -79,10 +79,10 @@ window.onload = function() {
 		playerOneText.addColor('#fff', 0);
 		
 		playerTwoScoreString = 'P2 Score: ';
-		playerTwoText = game.add.text(game.world.width - 250, 10, playerTwoScoreString + playerTwoScore, {font: '34px Impact'});
+		playerTwoText = game.add.text(game.world.width - 200, 10, playerTwoScoreString + playerTwoScore, {font: '34px Impact'});
 		playerTwoText.addColor('#fff', 0);
 		
-		timerText = game.add.text(game.world.centerX - 60, 10, 'Time Left: ' + Math.floor(timeLimit / 60), {font: '34px Impact'});
+		timerText = game.add.text(game.world.centerX - 80, 10, 'Time Left: ' + Math.floor(timeLimit / 60), {font: '34px Impact'});
 		timerText.addColor('#fff', 0);
 		music = game.add.audio('bgm');
 		music.play();
@@ -142,18 +142,21 @@ window.onload = function() {
 					}
 					else if (num == 1) {
 						var slime = slimes.create(randX, randY, wrongSlimeTwo);
+						game.physics.arcade.enable(slime);
 						slime.body.velocity.setTo(-200,200);
 						slime.body.bounce.set(1);
 						slime.body.collideWorldBounds = true;
 					}
 					else if (num == 2) {
 						var slime = slimes.create(randX, randY, wrongSlimeThree);
+						game.physics.arcade.enable(slime);
 						slime.body.velocity.setTo(200,-200);
 						slime.body.bounce.set(1);
 						slime.body.collideWorldBounds = true;
 					}
 					else if (num == 3) {
 						var slime = slimes.create(randX, randY, wrongSlimeFour);
+						game.physics.arcade.enable(slime);
 						slime.body.velocity.setTo(-200,-200);
 						slime.body.bounce.set(1);
 						slime.body.collideWorldBounds = true;
@@ -201,9 +204,11 @@ window.onload = function() {
 			finalRound = true;
 			playerOneActive = true;
 			chooseSlime();
-			lookForText = game.add.text(game.world.centerX - 150, game.world.centerY + 200, 'P1, Look for: ', {font: '34px Impact'});
+			lookForText.destroy();
+			lookForText = game.add.text(game.world.centerX - 300, game.world.centerY + 200, 'P1, Look for: ', {font: '34px Impact'});
 			lookForText.text = 'Final Round! x2 points! P1s turn!';
 			lookForText.addColor('#fff', 0);
+			chooseSlime();
 			game.time.events.add(Phaser.Timer.SECOND * 3, createFinalSlimes, this);
 			game.time.events.add(Phaser.Timer.SECOND * 3, setTimer, this);
 		}
@@ -328,7 +333,7 @@ window.onload = function() {
 		lookForText.addColor('#fff', 0);
 		playerOneActive = true;
 		finalRound = false;
-		slimeFrame = game.add.sprite(game.world.centerX + 100, game.world.centerY + 200, 'frame');
+		slimeFrame = game.add.sprite(game.world.centerX + 95, game.world.centerY + 190, 'frame');
 		rightSlimeCreated = false;
 		game.time.events.add(Phaser.Timer.SECOND * 4, createSlimes, this);
 		game.time.events.add(Phaser.Timer.SECOND * 4, setTimer, this);
