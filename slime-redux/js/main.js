@@ -121,7 +121,7 @@ window.onload = function() {
 			timerActive = false;
 			timerUp();
 		}
-		if ((game.time.now() >= slimeTimer) && timerActive == true) {
+		if ((game.time.now >= slimeTimer) && timerActive == true) {
 			rightSlimeCreated = false;
 			slimes.destroy(true,true);
 			rightSlimes.destroy(true,true);
