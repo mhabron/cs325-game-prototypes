@@ -21,6 +21,7 @@ window.onload = function() {
 		game.load.image('green', 'assets/green-slime.png', 32, 32);
 		game.load.image('smile', 'assets/green-slime-smiling.png', 32, 32);
 		game.load.image('nose', 'assets/blue-slime-nose.png', 32, 32);
+		game.load.image('frame', 'assets/frame.png', 40, 40);
 		game.load.audio('splat', 'assets/Bir Poop Splat.mp3');
 		game.load.audio('wrong', 'assets/Wrong-answer-sound-effect.mp3');
 		game.load.audio('bgm','assets/Puyo-puyo-theme.mp3');
@@ -52,10 +53,12 @@ window.onload = function() {
 	var rightSlimes;
 	var slimeTimer = 0;
 	var finalRound = false;
+	var slimeFrame;
     
     function create() {
 		slimes = game.add.group();
 		rightSlimes = game.add.group();
+		game.physics.startSystem(Phaser.Physics.ARCADE);
 		
 		slimes.inputEnableChildren = true;
 		rightSlimes.inputEnableChildren = true;
@@ -66,6 +69,7 @@ window.onload = function() {
 		chooseSlime();
 		game.time.events.add(Phaser.Timer.SECOND * 4, createSlimes, this);
 		game.time.events.add(Phaser.Timer.SECOND * 4, setTimer, this);
+		slimeFrame = game.add.sprite(game.world.centerX + 100, game.world.centerY + 200, 'frame');
 		
 		slimes.onChildInputDown.add(wrongSlimeClicked, this);
 		rightSlimes.onChildInputDown.add(rightSlimeClicked, this);
@@ -111,6 +115,53 @@ window.onload = function() {
 			}
 		}
 	}
+	function createFinalSlimes() {
+		var realSlimePlace = game.rnd.integerInRange(0, 99);
+		for (var y = 0; y < 10; y++) {
+			for (var x = 0; x < 10; x++) {
+				if ((realSlimePlace == (y * 10 + x)) && (rightSlimeCreated == false)) {
+					var randX = game.rnd.integerInRange(50,749);
+					var randY = game.rnd.integerInRange(50,549);
+					var rightSlime = rightSlimes.create(randX, randY, searchSlimeString);
+					game.physics.arcade.enable(rightSlime);
+					rightSlime.body.velocity.setTo(400,400);
+					rightSlime.body.bounce.set(1);
+					rightSlime.body.collideWorldBounds = true;
+					rightSlimeCreated = true;
+				}
+				else {
+					var num = game.rnd.integerInRange(0,3);
+					var randX = game.rnd.integerInRange(50,749);
+					var randY = game.rnd.integerInRange(50,549);
+					if (num == 0) {
+						var slime = slimes.create(randX, randY, wrongSlimeOne);
+						game.physics.arcade.enable(slime);
+						slime.body.velocity.setTo(200,200);
+						slime.body.bounce.set(1);
+						slime.body.collideWorldBounds = true;
+					}
+					else if (num == 1) {
+						var slime = slimes.create(randX, randY, wrongSlimeTwo);
+						slime.body.velocity.setTo(-200,200);
+						slime.body.bounce.set(1);
+						slime.body.collideWorldBounds = true;
+					}
+					else if (num == 2) {
+						var slime = slimes.create(randX, randY, wrongSlimeThree);
+						slime.body.velocity.setTo(200,-200);
+						slime.body.bounce.set(1);
+						slime.body.collideWorldBounds = true;
+					}
+					else if (num == 3) {
+						var slime = slimes.create(randX, randY, wrongSlimeFour);
+						slime.body.velocity.setTo(-200,-200);
+						slime.body.bounce.set(1);
+						slime.body.collideWorldBounds = true;
+					}
+				}
+			}
+		}
+	}
 	
     function update() {
 		if (timerActive == true){
@@ -121,7 +172,7 @@ window.onload = function() {
 			timerActive = false;
 			timerUp();
 		}
-		if ((game.time.now >= slimeTimer) && timerActive == true) {
+		if ((game.time.now >= slimeTimer) && (timerActive == true) && (finalRound == false)) {
 			rightSlimeCreated = false;
 			slimes.destroy(true,true);
 			rightSlimes.destroy(true,true);
@@ -138,15 +189,33 @@ window.onload = function() {
 		slimes.destroy(true,true);
 		rightSlimes.destroy(true,true);
 		rightSlimeCreated = false;
-		if (playerOneActive == true) {
+		if ((playerOneActive == true) && (finalRound == false)) {
 			playerOneActive = false;
-			lookForText = game.add.text(game.world.centerX - 10, game.world.centerY, 'P2, Look for: ', {font: '34px Impact'});
+			lookForText.text = 'P2, Look for: ';
 			lookForText.addColor('#fff', 0);
 			chooseSlime();
 			game.time.events.add(Phaser.Timer.SECOND * 3, createSlimes, this);
 			game.time.events.add(Phaser.Timer.SECOND * 3, setTimer, this);
 		}
+		else if ((finalRound == false) && (playerOneActive == false)) {
+			finalRound = true;
+			playerOneActive = true;
+			chooseSlime();
+			lookForText = game.add.text(game.world.centerX - 150, game.world.centerY + 200, 'P1, Look for: ', {font: '34px Impact'});
+			lookForText.text = 'Final Round! x2 points! P1s turn!';
+			lookForText.addColor('#fff', 0);
+			game.time.events.add(Phaser.Timer.SECOND * 3, createFinalSlimes, this);
+			game.time.events.add(Phaser.Timer.SECOND * 3, setTimer, this);
+		}
+		else if ((finalRound == true) && (playerOneActive == true)) {
+			playerOneActive = false;
+			lookForText.text = 'Final Round! x2 points! P2s turn!';
+			chooseSlime();
+			game.time.events.add(Phaser.Timer.SECOND * 3, createFinalSlimes, this);
+			game.time.events.add(Phaser.Timer.SECOND * 3, setTimer, this);
+		}
 		else {
+			lookForText.destroy();
 			if (playerOneScore > playerTwoScore) {
 				lookForText = game.add.text(game.world.centerX - 100, game.world.centerY - 50, 'Times Up! P1 Wins!', {font: '34px Impact'});
 				lookForText.addColor('#fff', 0);
@@ -169,11 +238,21 @@ window.onload = function() {
 	}
 	function rightSlimeClicked() {
 		if (playerOneActive == true) {
-			playerOneScore += 1;
+			if (finalRound == true) {
+				playerOneScore += 2;
+			}
+			else {
+				playerOneScore += 1;
+			}
 			playerOneText.text = playerOneScoreString + playerOneScore;
 		}
 		else {
-			playerTwoScore += 1;
+			if (finalRound == true) {
+				playerTwoScore += 2;
+			}
+			else {
+				playerTwoScore += 1;
+			}
 			playerTwoText.text = playerTwoScoreString + playerTwoScore;
 		}
 		soundfxTwo = game.add.audio('splat');
@@ -182,7 +261,12 @@ window.onload = function() {
 		slimes.destroy(true,true);
 		rightSlimes.destroy(true,true);
 		chooseSlime();
-		createSlimes();
+		if (finalRound == false) {
+			createSlimes();
+		}
+		else {
+			createFinalSlimes();
+		}
 		slimeTimer = game.time.now + 3000;
 	}
 	function chooseSlime() {
@@ -238,9 +322,10 @@ window.onload = function() {
 		timerText.text = "Time Left: " + Math.floor(timeLimit/60);
 		playerOneText.text = playerOneScoreString + playerOneScore;
 		playerTwoText.text = playerTwoScoreString + playerTwoScore;
-		lookForText = game.add.text(game.world.centerX - 100, game.world.centerY + 200, 'P1, Look for: ', {font: '34px Impact'});
+		lookForText.text = 'P1, Look for: ';
 		lookForText.addColor('#fff', 0);
 		playerOneActive = true;
+		finalRound = false;
 		
 		rightSlimeCreated = false;
 		game.time.events.add(Phaser.Timer.SECOND * 4, createSlimes, this);
