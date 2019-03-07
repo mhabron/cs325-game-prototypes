@@ -50,6 +50,7 @@ window.onload = function() {
 	var timerActive;
 	var timerText;
 	var rightSlimes;
+	var slimeTimer = 0;
     
     function create() {
 		slimes = game.add.group();
@@ -63,6 +64,7 @@ window.onload = function() {
 		
 		chooseSlime();
 		game.time.events.add(Phaser.Timer.SECOND * 4, createSlimes, this);
+		slimeTimer = game.time.now() + 3000;
 		
 		slimes.onChildInputDown.add(wrongSlimeClicked, this);
 		rightSlimes.onChildInputDown.add(rightSlimeClicked, this);
@@ -119,6 +121,13 @@ window.onload = function() {
 			timerActive = false;
 			timerUp();
 		}
+		if (game.time.now() >= slimeTimer) {
+			rightSlimeCreated = false;
+			slimes.destroy(true,true);
+			rightSlimes.destroy(true,true);
+			createSlimes();
+			slimeTimer = game.time.now + 3000;
+		}
     }
 	function timerUp() {
 		timeLimit = 3600;
@@ -169,6 +178,7 @@ window.onload = function() {
 		rightSlimes.destroy(true,true);
 		chooseSlime();
 		createSlimes();
+		slimeTimer = game.time.now() + 3000;
 	}
 	function chooseSlime() {
 		var chooseSlimeNum = game.rnd.integerInRange(0, 4);
