@@ -172,7 +172,9 @@ window.onload = function() {
 	}
 	function chooseSlime() {
 		var chooseSlimeNum = game.rnd.integerInRange(0, 4);
-		searchSlime.destroy();
+		if(searchSlime != null) {
+			searchSlime.destroy();
+		}
 		if (chooseSlime == 0) {
 			searchSlime = game.add.sprite(game.world.centerX + 100, game.world.centerY + 200, 'light-blue');
 			searchSlimeString  = 'light-blue';
