@@ -126,11 +126,11 @@ window.onload = function() {
 			slimes.destroy(true,true);
 			rightSlimes.destroy(true,true);
 			createSlimes();
-			slimeTimer = game.time.now() + 3000;
+			slimeTimer = game.time.now + 3000;
 		}
     }
 	function setTimer() {
-		slimeTimer = game.time.now() + 3000;
+		slimeTimer = game.time.now + 3000;
 		timerActive = true;
 	}
 	function timerUp() {
@@ -183,7 +183,7 @@ window.onload = function() {
 		rightSlimes.destroy(true,true);
 		chooseSlime();
 		createSlimes();
-		slimeTimer = game.time.now() + 3000;
+		slimeTimer = game.time.now + 3000;
 	}
 	function chooseSlime() {
 		var chooseSlimeNum = game.rnd.integerInRange(0, 4);
