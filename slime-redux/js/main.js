@@ -51,6 +51,7 @@ window.onload = function() {
 	var timerText;
 	var rightSlimes;
 	var slimeTimer = 0;
+	var finalRound = false;
     
     function create() {
 		slimes = game.add.group();
@@ -64,7 +65,7 @@ window.onload = function() {
 		
 		chooseSlime();
 		game.time.events.add(Phaser.Timer.SECOND * 4, createSlimes, this);
-		slimeTimer = game.time.now() + 3000;
+		game.time.events.add(Phaser.Timer.SECOND * 4, setTimer, this);
 		
 		slimes.onChildInputDown.add(wrongSlimeClicked, this);
 		rightSlimes.onChildInputDown.add(rightSlimeClicked, this);
@@ -79,7 +80,6 @@ window.onload = function() {
 		
 		timerText = game.add.text(game.world.centerX - 60, 10, 'Time Left: ' + Math.floor(timeLimit / 60), {font: '34px Impact'});
 		timerText.addColor('#fff', 0);
-		timerActive = true;
 		music = game.add.audio('bgm');
 		music.play();
 		music.loop = true;
@@ -121,14 +121,18 @@ window.onload = function() {
 			timerActive = false;
 			timerUp();
 		}
-		if (game.time.now() >= slimeTimer) {
+		if ((game.time.now() >= slimeTimer) && timerActive == true) {
 			rightSlimeCreated = false;
 			slimes.destroy(true,true);
 			rightSlimes.destroy(true,true);
 			createSlimes();
-			slimeTimer = game.time.now + 3000;
+			slimeTimer = game.time.now() + 3000;
 		}
     }
+	function setTimer() {
+		slimeTimer = game.time.now() + 3000;
+		timerActive = true;
+	}
 	function timerUp() {
 		timeLimit = 3600;
 		slimes.destroy(true,true);
@@ -136,10 +140,11 @@ window.onload = function() {
 		rightSlimeCreated = false;
 		if (playerOneActive == true) {
 			playerOneActive = false;
-			lookForText = game.add.text(game.world.centerX - 10, game.world.centerY, 'Times Up! P2s turn!', {font: '34px Impact'});
+			lookForText = game.add.text(game.world.centerX - 10, game.world.centerY, 'P2, Look for: ', {font: '34px Impact'});
 			lookForText.addColor('#fff', 0);
+			chooseSlime();
 			game.time.events.add(Phaser.Timer.SECOND * 3, createSlimes, this);
-			timerActive = true;
+			game.time.events.add(Phaser.Timer.SECOND * 3, setTimer, this);
 		}
 		else {
 			if (playerOneScore > playerTwoScore) {
@@ -154,7 +159,7 @@ window.onload = function() {
 				lookForText = game.add.text(game.world.centerX - 100, game.world.centerY - 50, 'Times Up! Tie!', {font: '34px Impact'});
 				lookForText.addColor('#fff', 0);
 			}
-			gameReset();
+			game.time.events.add(Phaser.Timer.SECOND * 3, gameReset, this);
 		}
 	}
 	function wrongSlimeClicked() {
@@ -233,10 +238,12 @@ window.onload = function() {
 		timerText.text = "Time Left: " + Math.floor(timeLimit/60);
 		playerOneText.text = playerOneScoreString + playerOneScore;
 		playerTwoText.text = playerTwoScoreString + playerTwoScore;
+		lookForText = game.add.text(game.world.centerX - 100, game.world.centerY + 200, 'P1, Look for: ', {font: '34px Impact'});
+		lookForText.addColor('#fff', 0);
 		playerOneActive = true;
 		
 		rightSlimeCreated = false;
 		game.time.events.add(Phaser.Timer.SECOND * 4, createSlimes, this);
-		timerActive = true;
+		game.time.events.add(Phaser.Timer.SECOND * 4, setTimer, this);
 	}
 };
