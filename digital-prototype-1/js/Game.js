@@ -44,8 +44,8 @@ GameStates.makeGame = function( game, shared ) {
 		sword.kill();
 		hasSword = true;
 	}
-	function player_gets_star(star, player) {
-		star.kill();
+	function player_gets_star(throwing_star, player) {
+		throwing_star.kill();
 		hasRanged = true;
 	}
 	function starHitsEnemy(thrown_star, enemy) {
@@ -97,10 +97,13 @@ GameStates.makeGame = function( game, shared ) {
 			groundLayer1.resizeWorld();
 			
 			goal_post = game.add.sprite(3104, 538, 'goal');
-			sword = game.add.sprite(496, 550, 'sword');
-			star = game.add.sprite(1336 ,676, 'throwing_star');
+			sword = game.add.sprite(496, 560, 'sword');
+			throwing_star = game.add.sprite(1336 ,676, 'throwing_star');
 			player = game.add.sprite(64, 576, 'player');
 			game.physics.arcade.enable(player);
+			game.physics.arcade.enable(sword);
+			game.physics.arcade.enable(throwing_star);
+			game.physics.arcade.enable(goal_post);
 			
 			player.body.gravity.y = 2000;
 			
@@ -142,12 +145,12 @@ GameStates.makeGame = function( game, shared ) {
 			enemy2 = enemies.getFirstExists(false);
 			enemy2.animations.add('cat_idle', [0,1,2,3], 5, true);
 			enemy2.animations.play('cat_idle');
-			enemy2.reset(1540, 546);
+			enemy2.reset(1540, 526);
 			
 			enemy3 = enemies.getFirstExists(false);
 			enemy3.animations.add('cat_idle', [0,1,2,3], 5, true);
 			enemy3.animations.play('cat_idle');
-			enemy3.reset(832, 634);
+			enemy3.reset(832, 614);
 			
         },
 		
@@ -181,7 +184,7 @@ GameStates.makeGame = function( game, shared ) {
 				attack();
 			}
 			game.physics.arcade.overlap(goal_post, player, player_gets_goal, null, this);
-			game.physics.arcade.overlap(star, player, player_gets_star, null, this);
+			game.physics.arcade.overlap(throwing_star, player, player_gets_star, null, this);
 			game.physics.arcade.overlap(sword, player, player_gets_sword, null, this);
 			game.physics.arcade.overlap(stars, enemies, starHitsEnemy, null, this);
 			game.physics.arcade.overlap(player, enemies, enemyPlayerCollision, null, this);
