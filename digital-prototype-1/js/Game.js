@@ -28,6 +28,10 @@ GameStates.makeGame = function( game, shared ) {
         game.state.start('MainMenu');
 
     }
+	
+	function player_gets_goal(goal_post, player) {
+		quitGame();
+	}
     
     return {
     
@@ -70,9 +74,6 @@ GameStates.makeGame = function( game, shared ) {
 			
         },
 		
-		player_gets_goal: function (goal_post, player) {
-			quitGame();
-		},
     
         update: function () {
     
