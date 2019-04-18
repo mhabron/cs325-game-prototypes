@@ -44,19 +44,6 @@
          "tilecount":135,
          "tileheight":32,
          "tilewidth":32
-        }, 
-        {
-         "columns":9,
-         "firstgid":136,
-         "image":"platformer_32_full.png",
-         "imageheight":480,
-         "imagewidth":288,
-         "margin":0,
-         "name":"platformer_32_full",
-         "spacing":0,
-         "tilecount":135,
-         "tileheight":32,
-         "tilewidth":32
         }],
  "tilewidth":32,
  "type":"map",
