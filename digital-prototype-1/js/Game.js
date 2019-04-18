@@ -34,11 +34,11 @@ GameStates.makeGame = function( game, shared ) {
 			map = game.add.tilemap('level1');
 			map.addTilesetImage('platformer_32_full', 'tiles');
 			
-			backgroundLayer1 = map.createLayer('BackgroundLayer');
-			groundLayer1 = map.createLayer('GroundLayer');
+			backgroundLayer1 = map.createLayer('Background Layer');
+			groundLayer1 = map.createLayer('Ground Layer');
 			
 			backgroundSky = game.add.tileSprite(0, 0, 1024, 1024, 'sky');
-			map.setCollisionBetween(1, 100, true, 'GroundLayer');
+			map.setCollisionBetween(1, 100, true, 'Ground Layer');
 			groundLayer1.resizeWorld();
 			
 			goal_post = game.add.sprite(3104, 538);
