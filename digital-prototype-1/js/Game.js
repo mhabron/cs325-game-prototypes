@@ -102,7 +102,6 @@ GameStates.makeGame = function( game, shared ) {
 			game.physics.arcade.enable(player);
 			
 			player.body.gravity.y = 2000;
-			player.body.gravity.x = 20;
 			
 			player.animations.add('idle', [0,1,2], 10, true);
 			player.animations.add('attack', [42,43,44,45,46,47,48], 10);
@@ -135,12 +134,18 @@ GameStates.makeGame = function( game, shared ) {
 			attackButton = game.input.keyboard.addKey(Phaser.Keyboard.X);
 			
 			enemy1 = enemies.getFirstExists(false);
+			enemy1.animations.add('cat_idle', [0,1,2,3], 5, true);
+			enemy1.animations.play('cat_idle');
 			enemy1.reset(2176, 538);
 			
 			enemy2 = enemies.getFirstExists(false);
+			enemy2.animations.add('cat_idle', [0,1,2,3], 5, true);
+			enemy2.animations.play('cat_idle');
 			enemy2.reset(1540, 546);
 			
 			enemy3 = enemies.getFirstExists(false);
+			enemy3.animations.add('cat_idle', [0,1,2,3], 5, true);
+			enemy3.animations.play('cat_idle');
 			enemy3.reset(832, 634);
 			
         },
