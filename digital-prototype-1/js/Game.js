@@ -16,6 +16,12 @@ GameStates.makeGame = function( game, shared ) {
 	var star;
 	var hasSword = false;
 	var hasRanged = false;
+	var bulletTime = 0;
+	var isAttacking = false;
+	var enemy1;
+	var enemy2;
+	var enemy3;
+	var stars;
     
     function quitGame() {
 
@@ -23,7 +29,8 @@ GameStates.makeGame = function( game, shared ) {
         //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
 		player.kill();
 		goal_post.kill();
-
+		hasSword = false;
+		hasRanged = false;
         //  Then let's go back to the main menu.
         game.state.start('MainMenu');
 
@@ -31,6 +38,43 @@ GameStates.makeGame = function( game, shared ) {
 	
 	function player_gets_goal(goal_post, player) {
 		quitGame();
+	}
+	function player_gets_sword(sword, player) {
+		sword.kill();
+		hasSword = true;
+	}
+	function player_gets_star(star, player) {
+		star.kill();
+		hasRanged = true;
+	}
+	function starHitsEnemy(thrown_star, enemy) {
+		thrown_star.kill();
+		enemy.kill();
+	}
+	function enemyPlayerCollision(player, enemy) {
+		if (isAttacking) {
+			enemy.kill();
+		}
+		else{
+			player.reset(enemy.x - 10, enemy.y);
+		}
+	}
+	function attack() {
+		if (isAttacking == false) {
+			player.animations.play('attack');
+			isAttacking = true;
+			game.time.events.add(Phaser.Timer.SECOND * 1, function(){player.animations.play('idle'), isAttacking = false}, this);
+		}
+	}
+	function fireStar() {
+		if (game.time.now > bulletTime) {
+			bullet = bullets.getFirstExists(false);
+			if (bullet) {
+				bullet.reset(player.x + 2, player.y);
+				bullet.body.velocity.x = 400;
+				bulletTime = game.time.now + 400;
+			}
+		}
 	}
     
     return {
@@ -48,6 +92,8 @@ GameStates.makeGame = function( game, shared ) {
 			groundLayer1.resizeWorld();
 			
 			goal_post = game.add.sprite(3104, 538);
+			sword = game.add.sprite(496, 630, 'sword');
+			star = game.add.sprite(1376 ,736, 'throwing_star');
 			player = game.add.sprite(64, 576, 'player');
 			game.physics.arcade.enable(player);
 			
@@ -55,22 +101,41 @@ GameStates.makeGame = function( game, shared ) {
 			player.body.gravity.x = 20;
 			
 			player.animations.add('idle', [0,1,2], 10, true);
+			player.animations.add('attack', [42,43,44,45,46,47,48], 10);
 			player.animations.play('idle');
 			
 			game.camera.follow(player);
 			
-			/*
+			
+			stars = game.add.group();
+			stars.enableBody = true;
+			stars.physicsBodyType = Phaser.Physics.ARCADE;
+			stars.createMultiple(20, 'throwing_star');
+			stars.setAll('anchor.x', 0.5);
+			stars.setAll('anchor.y', 1);
+			stars.setAll('outOfBoundsKill', true);
+			stars.setAll('checkWorldBounds', true);
+			
 			enemies = game.add.group();
 			enemies.enableBody = true;
 			enemies.physicsBodyType = Phaser.Physics.ARCADE;
 			enemies.createMultiple(10, 'cat', [0,1,2,3]);
 			enemies.setAll('outofBoundsKill', true);
 			enemies.setAll('checkWorldBounds', true);
-			*/
+			
 			
 			keys = game.input.keyboard.createCursorKeys();
 			fireButton = game.input.keyboard.addKey(Phaser.Keyboard.Z);
 			attackButton = game.input.keyboard.addKey(Phaser.Keyboard.X);
+			
+			enemy1 = enemies.getFirstExists(false);
+			enemy1.reset(2176, 538);
+			
+			enemy2 = enemies.getFirstExists(false);
+			enemy2.reset(1540, 546);
+			
+			enemy3 = enemies.getFirstExists(false);
+			enemy3.reset(832, 634);
 			
         },
 		
@@ -94,8 +159,17 @@ GameStates.makeGame = function( game, shared ) {
 			if (keys.right.isDown) {
 				player.body.velocity.x = 200;
 			}
+			if(fireButton.isDown && hasRanged == true){
+				fireStar();
+			}
+			if(attackButton.isDown && hasSword == true) {
+				attack();
+			}
 			game.physics.arcade.overlap(goal_post, player, player_gets_goal, null, this);
-			
+			game.physics.arcade.overlap(star, player, player_gets_star, null, this);
+			game.physics.arcade.overlap(sword, player, player_gets_sword, null, this);
+			game.physics.arcade.overlap(stars, enemies, starHitsEnemy, null, this);
+			game.physics.arcade.overlap(player, enemies, enemyPlayerCollision, null, this);
         }
     };
 };
