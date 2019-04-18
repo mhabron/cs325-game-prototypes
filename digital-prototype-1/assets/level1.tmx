@@ -3,9 +3,6 @@
  <tileset firstgid="1" name="platformer_32_full" tilewidth="32" tileheight="32" tilecount="135" columns="9">
   <image source="platformer_32_full.png" width="288" height="480"/>
  </tileset>
- <tileset firstgid="136" name="platformer_32_full" tilewidth="32" tileheight="32" tilecount="135" columns="9">
-  <image source="platformer_32_full.png" width="288" height="480"/>
- </tileset>
  <layer id="3" name="Background Layer" width="100" height="25">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
