@@ -30,7 +30,7 @@ GameStates.makeGame = function( game, shared ) {
         create: function () {
 			game.physics.startSystem(Phaser.Physics.ARCADE);
 			map = game.add.tilemap('level1');
-			map.addTilesetImage('tiles32', 'tiles');
+			map.addTilesetImage('platformer_32_full', 'tiles');
 			
 			backgroundLayer1 = map.createLayer('BackgroundLayer');
 			groundLayer1 = map.createLayer('GroundLayer');
