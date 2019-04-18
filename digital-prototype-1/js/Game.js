@@ -85,6 +85,7 @@ GameStates.makeGame = function( game, shared ) {
     
         create: function () {
 			game.physics.startSystem(Phaser.Physics.ARCADE);
+			game.stage.backgroundColor = '#a9f0ff';
 			map = game.add.tilemap('level1');
 			map.addTilesetImage('platformer_32_full', 'tiles');
 			
@@ -95,9 +96,9 @@ GameStates.makeGame = function( game, shared ) {
 			map.setCollisionBetween(1, 100, true, 'Ground Layer');
 			groundLayer1.resizeWorld();
 			
-			goal_post = game.add.sprite(3104, 538);
-			sword = game.add.sprite(496, 530, 'sword');
-			star = game.add.sprite(1356 ,636, 'throwing_star');
+			goal_post = game.add.sprite(3104, 538, 'goal');
+			sword = game.add.sprite(496, 550, 'sword');
+			star = game.add.sprite(1336 ,676, 'throwing_star');
 			player = game.add.sprite(64, 576, 'player');
 			game.physics.arcade.enable(player);
 			
@@ -167,8 +168,11 @@ GameStates.makeGame = function( game, shared ) {
 			if (keys.left.isDown) {
 				player.body.velocity.x = -200;
 			}
-			if (keys.right.isDown) {
+			else if (keys.right.isDown) {
 				player.body.velocity.x = 200;
+			}
+			else {
+				player.body.velocity.x = 0;
 			}
 			if(fireButton.isDown && hasRanged == true){
 				fireStar();

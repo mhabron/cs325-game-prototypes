@@ -36,7 +36,7 @@ GameStates.makePreloader = function( game ) {
 			game.load.spritesheet('player', 'assets/player_sheet.png', 50, 37);
 			game.load.image('sword', 'assets/sword.png');
 			game.load.image('throwing_star', 'assets/throwing_star.png');
-			game.load.spritesheet('cat', 'assets/cat-enemy.png', 32, 32);
+			game.load.spritesheet('cat', 'assets/cat-enemy.png', 64, 64);
         },
     
         create: function () {
