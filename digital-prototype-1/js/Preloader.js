@@ -30,7 +30,7 @@ GameStates.makePreloader = function( game ) {
             game.load.image( 'logo', 'assets/phaser.png' );
 			
 			game.load.tilemap('level1', 'assets/level1.json', null, Phaser.Tilemap.TILED_JSON);
-			game.load.image('tiles', 'assets/platformer_32_full.png');
+			game.load.tileset('tileset', 'assets/platformer_32_full.png', 32, 32);
 			game.load.image('sky', 'assets/sky_background.jpg');
 			game.load.image('goal', 'assets/goal_sign.png');
 			game.load.spritesheet('player', 'assets/player_sheet.png', 50, 37);
