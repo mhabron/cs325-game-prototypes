@@ -13,7 +13,7 @@ GameStates.makeGame = function( game, shared ) {
 	var attackButton;
 	var fireButton;
 	var sword;
-	var star;
+	var throwing_star;
 	var hasSword = false;
 	var hasRanged = false;
 	var bulletTime = 0;
