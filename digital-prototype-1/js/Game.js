@@ -22,6 +22,7 @@ GameStates.makeGame = function( game, shared ) {
 	var enemy2;
 	var enemy3;
 	var stars;
+	var starBullet;
     
     function quitGame() {
 
@@ -68,13 +69,16 @@ GameStates.makeGame = function( game, shared ) {
 	}
 	function fireStar() {
 		if (game.time.now > bulletTime) {
-			bullet = bullets.getFirstExists(false);
-			if (bullet) {
-				bullet.reset(player.x + 2, player.y);
-				bullet.body.velocity.x = 400;
+			starBullet = stars.getFirstExists(false);
+			if (starBullet) {
+				starBullet.reset(player.x + 2, player.y);
+				starBullet.body.velocity.x = 400;
 				bulletTime = game.time.now + 400;
 			}
 		}
+	}
+	function resetPlayer() {
+		player.reset(64, 576);
 	}
     
     return {
@@ -103,6 +107,8 @@ GameStates.makeGame = function( game, shared ) {
 			player.animations.add('idle', [0,1,2], 10, true);
 			player.animations.add('attack', [42,43,44,45,46,47,48], 10);
 			player.animations.play('idle');
+			player.checkWorldBounds = true;
+			player.events.onOutOfBounds.add(resetPlayer, this);
 			
 			game.camera.follow(player);
 			
