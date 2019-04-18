@@ -12,6 +12,8 @@ GameStates.makeGame = function( game, shared ) {
 	var keys;
 	var attackButton;
 	var fireButton;
+	var hasSword = false;
+	var hasRanged = false;
     
     function quitGame() {
 
