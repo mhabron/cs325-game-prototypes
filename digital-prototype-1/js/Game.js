@@ -66,7 +66,7 @@ GameStates.makeGame = function( game, shared ) {
 			
         },
 		
-		player_gets_goal(goal_post, player): function () {
+		player_gets_goal: function (goal_post, player) {
 			quitGame();
 		},
     
