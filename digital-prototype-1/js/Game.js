@@ -91,19 +91,19 @@ GameStates.makeGame = function( game, shared ) {
 			backgroundLayer1 = map.createLayer('Background Layer');
 			groundLayer1 = map.createLayer('Ground Layer');
 			
-			backgroundSky = game.add.tileSprite(0, 0, 1024, 1024, 'sky');
+
 			map.setCollisionBetween(1, 100, true, 'Ground Layer');
 			groundLayer1.resizeWorld();
 			
 			goal_post = game.add.sprite(3104, 538);
-			sword = game.add.sprite(496, 630, 'sword');
-			star = game.add.sprite(1376 ,736, 'throwing_star');
+			sword = game.add.sprite(496, 530, 'sword');
+			star = game.add.sprite(1356 ,636, 'throwing_star');
 			player = game.add.sprite(64, 576, 'player');
 			game.physics.arcade.enable(player);
 			
 			player.body.gravity.y = 2000;
 			
-			player.animations.add('idle', [0,1,2], 10, true);
+			player.animations.add('idle', [0,1,2], 5, true);
 			player.animations.add('attack', [42,43,44,45,46,47,48], 10);
 			player.animations.play('idle');
 			player.checkWorldBounds = true;
