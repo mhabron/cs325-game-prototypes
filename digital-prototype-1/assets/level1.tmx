@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="100" height="25" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="1">
- <tileset firstgid="1" source="platformer_32_full.tsx"/>
+ <tileset firstgid="1" name="platformer_32_full" tilewidth="32" tileheight="32" tilecount="135" columns="9">
+  <image source="platformer_32_full.png" width="288" height="480"/>
+ </tileset>
+ <tileset firstgid="136" name="platformer_32_full" tilewidth="32" tileheight="32" tilecount="135" columns="9">
+  <image source="platformer_32_full.png" width="288" height="480"/>
+ </tileset>
  <layer id="3" name="Background Layer" width="100" height="25">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
