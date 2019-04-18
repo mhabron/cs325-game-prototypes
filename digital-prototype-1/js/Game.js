@@ -168,8 +168,6 @@ GameStates.makeGame = function( game, shared ) {
 			game.physics.arcade.collide(player, groundLayer1);
 			if (keys.up.isDown && canJump == true) {
 				player.body.velocity.y = -500;
-				game.time.events.add(Phaser.Timer.SECOND * 2, function(){canJump = false});
-				game.time.events.add(Phaser.Timer.SECOND * 4, function(){canJump = true});
 			}
 			if (keys.left.isDown) {
 				player.body.velocity.x = -200;
