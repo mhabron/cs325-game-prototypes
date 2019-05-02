@@ -25,8 +25,9 @@ GameStates.makePreloader = function( game ) {
             //	As this is just a Project Template I've not provided these assets, swap them for your own.
             game.load.image('titlePage', 'assets/title_screen.png');
             game.load.atlas('playButton', 'assets/play_button.png', 'assets/play_button.json');
-            game.load.audio('titleMusic', ['assets/Poppers and Prosecco.mp3']);
+            game.load.audio('titleMusic', ['assets/Alice Maestra.mp3']);
 			game.load.audio('stage_music', 'assets/Dreamy pilot.mp3');
+			game.load.audioo('death_sound', 'assets/death_sound.mp3');
             //	+ lots of other required assets here
             game.load.image( 'logo', 'assets/phaser.png' );
 			

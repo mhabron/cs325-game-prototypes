@@ -7,6 +7,7 @@ GameStates.makeGame = function( game, shared ) {
 	var backgroundLayer1;
 	var groundLayer1;
 	var music;
+	var death_sound;
 	
 	var goal_post;
 	var player;
@@ -29,6 +30,9 @@ GameStates.makeGame = function( game, shared ) {
 	var isAttacking = false;
 	var facing = 'right';
 	var canMove = true;
+	
+	var bossActive = false;
+	var boss_health = 8;
 	
 	var enemy1;
 	var enemy2;
@@ -113,12 +117,15 @@ GameStates.makeGame = function( game, shared ) {
 		music.stop();
 		canMove = false;
 		player.animations.play('death');
+		death_sound.play();
 		spawnTimer = game.time.now + 3000;
 		if (game.time.now > spawnTimer) {
 			if(lives > 1) {
 				lives--;
 				player.reset(64, 576);
 				health = 8;
+				canMove = true;
+				music.play();
 			}
 			else{
 				quitGame();
@@ -134,6 +141,7 @@ GameStates.makeGame = function( game, shared ) {
 			map = game.add.tilemap('level1');
 			map.addTilesetImage('platformer_32_full', 'tiles');
 			music = game.add.audio('stage_music');
+			death_sound = game.add.audio('death_sound');
 			music.loop = true;
 			music.play();
 			
@@ -148,6 +156,7 @@ GameStates.makeGame = function( game, shared ) {
 			sword = game.add.sprite(496, 560, 'sword');
 			throwing_star = game.add.sprite(1336 ,676, 'throwing_star');
 			player = game.add.sprite(64, 576, 'player');
+			
 			player_health_bar = game.add.sprite(64, 200);
 			player_health_bar.frame = 0;
 			player_health_bar.fixedToCamera = true;
@@ -235,49 +244,52 @@ GameStates.makeGame = function( game, shared ) {
             // This function returns the rotation angle that makes it visually match its
             // new trajectory.
 			game.physics.arcade.collide(player, groundLayer1);
-			if (keys.up.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
-				player.body.velocity.y = -800;
-				jumpTimer = game.time.now + 1000;
-				if (facing == 'left') {
-					player.animations.play('jump_left');
+			if (canMove == true) {
+				if (keys.up.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
+					player.body.velocity.y = -800;
+					jumpTimer = game.time.now + 1000;
+					if (facing == 'left') {
+						player.animations.play('jump_left');
+					}
+					else {
+						player.animations.play('jump_right');
+					}
 				}
-				else {
-					player.animations.play('jump_right');
+				if (keys.left.isDown && isAttacking == false) {
+					player.body.velocity.x = -200;
+					facing = 'left';
+					if (player.body.onFloor() == true){
+						player.animations.play('left');
+					}
 				}
-			}
-			if (keys.left.isDown && isAttacking == false) {
-				player.body.velocity.x = -200;
-				facing = 'left';
-				if (player.body.onFloor() == true){
-					player.animations.play('left');
-				}
-			}
-			else if (keys.right.isDown && isAttacking == false) {
-				player.body.velocity.x = 200;
-				facing = 'right';
-				if (player.body.onFloor() == true){
-					player.animations.play('right');
-				}
-			}
-			else {
-				if(facing == 'left' && isAttacking == false) {
-					if (player.body.onFloor() == true) {
-						player.animations.play('idle_left');
+				else if (keys.right.isDown && isAttacking == false) {
+					player.body.velocity.x = 200;
+					facing = 'right';
+					if (player.body.onFloor() == true){
+						player.animations.play('right');
 					}
 				}
 				else {
-					if (player.body.onFloor() == true && isAttacking == false) {
-						player.animations.play('idle_right');
+					if(facing == 'left' && isAttacking == false) {
+						if (player.body.onFloor() == true) {
+							player.animations.play('idle_left');
+						}
 					}
+					else {
+						if (player.body.onFloor() == true && isAttacking == false) {
+							player.animations.play('idle_right');
+						}
+					}
+					player.body.velocity.x = 0;
 				}
-				player.body.velocity.x = 0;
+				if(fireButton.isDown && hasRanged == true){
+					fireStar();
+				}
+				if(attackButton.isDown && hasSword == true) {
+					attack();
+				}
 			}
-			if(fireButton.isDown && hasRanged == true){
-				fireStar();
-			}
-			if(attackButton.isDown && hasSword == true) {
-				attack();
-			}
+			
 			if(health > 0) {
 				player_health_bar.frame = 8 - health;
 			}
