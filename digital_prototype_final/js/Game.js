@@ -189,13 +189,13 @@ GameStates.makeGame = function( game, shared ) {
 			throwing_star = game.add.sprite(1336 ,676, 'throwing_star');
 			player = game.add.sprite(64, 576, 'player');
 			
-			player_health_bar = game.add.sprite('player_health',64, 200);
+			player_health_bar = game.add.sprite(64, 200, 'player_health');
 			player_health_bar.frame = 0;
 			player_health_bar.fixedToCamera = true;
 			
-			boss = game.add.sprite('enemy_sprite', 3392, 704);
+			boss = game.add.sprite(3392, 704, 'enemy_sprite');
 			
-			boss_health_bar = game.add.sprite('player_health',736, 200);
+			boss_health_bar = game.add.sprite(736, 200, 'boss_health');
 			boss_health_bar.frame = 0;
 			boss_health_bar.fixedToCamera = true;
 			
