@@ -29,6 +29,7 @@ GameStates.makePreloader = function( game ) {
 			game.load.audio('stage_music', 'assets/Dreamy pilot.mp3');
 			game.load.audio('death_sound', 'assets/death_sound.mp3');
 			game.load.audio('boss_music', 'assets/Maidens Capriccio.mp3');
+			game.load.audio('victory_music', 'assets/Final_Fantasy_Victory.mp3');
             //	+ lots of other required assets here
             game.load.image( 'logo', 'assets/phaser.png' );
 			

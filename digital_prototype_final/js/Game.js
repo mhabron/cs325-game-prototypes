@@ -8,6 +8,7 @@ GameStates.makeGame = function( game, shared ) {
 	var groundLayer1;
 	var music;
 	var boss_music;
+	var victory_music;
 	var death_sound;
 	
 	var goal_post;
@@ -36,6 +37,7 @@ GameStates.makeGame = function( game, shared ) {
 	var bossActive = false;
 	var boss_health = 8;
 	var boss_direction = 'left';
+	var bossAttackTimer = 0;
 	
 	var enemy1;
 	var enemy2;
@@ -58,6 +60,9 @@ GameStates.makeGame = function( game, shared ) {
 		player.kill();
 		goal_post.kill();
 		music.stop();
+		victory_music.stop();
+		death_sound.stop();
+		boss_music.stop();
 		lives = 3;
 		health = 8;
 		hasSword = false;
@@ -167,6 +172,7 @@ GameStates.makeGame = function( game, shared ) {
 			music = game.add.audio('stage_music');
 			boss_music = game.add.audio('boss_music');
 			death_sound = game.add.audio('death_sound');
+			victory_music = game.add.audio('victory_music');
 			boss_music = true;
 			music.loop = true;
 			music.play();
@@ -347,13 +353,20 @@ GameStates.makeGame = function( game, shared ) {
 			else {
 				resetPlayer();
 			}
-			
+			if(player.x == boss.x - 200 && player.body.onFloor() && bossActive == false) {
+				bossActive = true;
+			}
+			if(bossActive) {
+				
+			}
 			if(boss_health > 0) {
 				boss_health_bar.frame = 8 - boss_health;
 			}
 			else {
 				canMove = false;
 				boss.animations.play('death');
+				victory_music.play();
+				game.time.events.add(Phaser.Timer.SECOND * 3, quitGame, this);
 			}
 			game.physics.arcade.overlap(goal_post, player, player_gets_goal, null, this);
 			game.physics.arcade.overlap(throwing_star, player, player_gets_star, null, this);
