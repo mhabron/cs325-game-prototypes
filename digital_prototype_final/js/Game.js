@@ -11,6 +11,7 @@ GameStates.makeGame = function( game, shared ) {
 	var goal_post;
 	var player;
 	var enemies;
+	var lives = 3;
 	
 	var keys;
 	var attackButton;
@@ -101,6 +102,12 @@ GameStates.makeGame = function( game, shared ) {
 	}
 	function resetPlayer() {
 		player.reset(64, 576);
+		if(lives > 1) {
+			lives--;
+		}
+		else{
+			quitGame();
+		}
 	}
     
     return {
@@ -111,7 +118,7 @@ GameStates.makeGame = function( game, shared ) {
 			map = game.add.tilemap('level1');
 			map.addTilesetImage('platformer_32_full', 'tiles');
 			music = game.add.audio('stage_music');
-			music.loop() = true;
+			music.loop = true;
 			music.play();
 			
 			backgroundLayer1 = map.createLayer('Background Layer');
