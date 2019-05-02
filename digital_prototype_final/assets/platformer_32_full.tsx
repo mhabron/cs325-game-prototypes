@@ -6,32 +6,22 @@
    <object id="5" x="0" y="20" width="32" height="12"/>
   </objectgroup>
  </tile>
- <tile id="10">
+ <tile id="16">
+  <objectgroup draworder="index">
+   <object id="1" x="5" y="20" width="28" height="12"/>
+  </objectgroup>
+ </tile>
+ <tile id="17">
   <objectgroup draworder="index">
    <object id="1" x="0" y="20" width="32" height="12"/>
   </objectgroup>
  </tile>
- <tile id="18">
-  <objectgroup draworder="index">
-   <object id="1" x="5" y="20" width="27" height="12"/>
-  </objectgroup>
- </tile>
- <tile id="19">
-  <objectgroup draworder="index">
-   <object id="1" x="0" y="20" width="32" height="12"/>
-  </objectgroup>
- </tile>
- <tile id="20">
-  <objectgroup draworder="index">
-   <object id="1" x="0" y="20" width="26" height="12"/>
-  </objectgroup>
- </tile>
- <tile id="84">
+ <tile id="70">
   <objectgroup draworder="index">
    <object id="1" x="0" y="8" width="32" height="13"/>
   </objectgroup>
  </tile>
- <tile id="85">
+ <tile id="71">
   <objectgroup draworder="index">
    <object id="1" x="0" y="8" width="32" height="13"/>
   </objectgroup>

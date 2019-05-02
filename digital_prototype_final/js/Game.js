@@ -208,8 +208,8 @@ GameStates.makeGame = function( game, shared ) {
             // new trajectory.
 			game.physics.arcade.collide(player, groundLayer1);
 			if (keys.up.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
-				player.body.velocity.y = -700;
-				jumpTimer = game.time.now + 1200;
+				player.body.velocity.y = -800;
+				jumpTimer = game.time.now + 1000;
 				if (facing == 'left') {
 					player.animations.play('jump_left');
 				}
@@ -217,14 +217,14 @@ GameStates.makeGame = function( game, shared ) {
 					player.animations.play('jump_right');
 				}
 			}
-			if (keys.left.isDown) {
+			if (keys.left.isDown && isAttacking == false) {
 				player.body.velocity.x = -200;
 				facing = 'left';
 				if (player.body.onFloor() == true){
 					player.animations.play('left');
 				}
 			}
-			else if (keys.right.isDown) {
+			else if (keys.right.isDown && isAttacking == false) {
 				player.body.velocity.x = 200;
 				facing = 'right';
 				if (player.body.onFloor() == true){
@@ -232,13 +232,13 @@ GameStates.makeGame = function( game, shared ) {
 				}
 			}
 			else {
-				if(facing == 'left') {
+				if(facing == 'left' && isAttacking == false) {
 					if (player.body.onFloor() == true) {
 						player.animations.play('idle_left');
 					}
 				}
 				else {
-					if (player.body.onFloor() == true) {
+					if (player.body.onFloor() == true && isAttacking == false) {
 						player.animations.play('idle_right');
 					}
 				}
