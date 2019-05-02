@@ -356,7 +356,7 @@ GameStates.makeGame = function( game, shared ) {
 			else {
 				resetPlayer();
 			}
-			if(player.x == boss.x - 200 && player.body.onFloor() && bossActive == false) {
+			if(player.x >= (boss.x - 384) && player.body.onFloor() && bossActive == false) {
 				bossActive = true;
 			}
 			if(bossActive && game.time.now > bossAttackTimer) {
@@ -364,13 +364,13 @@ GameStates.makeGame = function( game, shared ) {
 				if (boss_direction == 'left') {
 					boss_direction = 'right';
 					boss.animations.play('attack_right');
-					boss.body.velocity.x = 300;
+					boss.body.velocity.x = 400;
 					game.time.events.add(Phaser.Timer.SECOND * 1, function(){boss.body.velocity.x = 0, boss.animations.play('idle_right')}, this);
 				}
 				else if (boss_direction == 'right') {
 					boss_direction = 'left';
 					boss.animations.play('attack_left');
-					boss.body.velocity.x = -300;
+					boss.body.velocity.x = -400;
 					game.time.events.add(Phaser.Timer.SECOND * 1, function(){boss.body.velocity.x = 0, boss.animations.play('idle_left')}, this);
 				}
 			}
