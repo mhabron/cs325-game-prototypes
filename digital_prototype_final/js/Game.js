@@ -71,14 +71,15 @@ GameStates.makeGame = function( game, shared ) {
 	}
 	function attack() {
 		if (isAttacking == false) {
+			isAttacking = true;
 			if (facing == 'left'){
 				player.animations.play('attack_left');
+				game.time.events.add(Phaser.Timer.SECOND * 1, function(){player.animations.play('idle_left'), isAttacking = false}, this);
 			}
 			else {
 				player.animations.play('attack_right');
+				game.time.events.add(Phaser.Timer.SECOND * 1, function(){player.animations.play('idle_right'), isAttacking = false}, this);
 			}
-			isAttacking = true;
-			game.time.events.add(Phaser.Timer.SECOND * 1, function(){player.animations.play('idle'), isAttacking = false}, this);
 		}
 	}
 	function fireStar() {
