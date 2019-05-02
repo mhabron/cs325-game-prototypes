@@ -189,7 +189,7 @@ GameStates.makeGame = function( game, shared ) {
             // This function returns the rotation angle that makes it visually match its
             // new trajectory.
 			game.physics.arcade.collide(player, groundLayer1);
-			if (keys.up.isDown && player.body.touching.down == true && game.time.now > jumpTimer) {
+			if (keys.up.isDown && player.body.onFloor() == true && game.time.now > jumpTimer) {
 				player.body.velocity.y = -400;
 				jumpTimer = game.time.now + 1200;
 				if (facing == 'left') {
@@ -202,26 +202,25 @@ GameStates.makeGame = function( game, shared ) {
 			else if (keys.left.isDown) {
 				player.body.velocity.x = -200;
 				facing = 'left';
-				if (player.body.touching.down == true){
+				if (player.body.onFloor() == true){
 					player.animations.play('left');
 				}
 			}
 			else if (keys.right.isDown) {
 				player.body.velocity.x = 200;
 				facing = 'right';
-				if (player.body.touching.down == true){
+				if (player.body.onFloor() == true){
 					player.animations.play('right');
 				}
 			}
 			else {
-				player.animations.stop();
 				if(facing == 'left') {
-					if (player.body.touching.down == true) {
+					if (player.body.onFloor() == true) {
 						player.animations.play('idle_left');
 					}
 				}
 				else {
-					if (player.body.touching.down == true) {
+					if (player.body.onFloor() == true) {
 						player.animations.play('idle_right');
 					}
 				}
