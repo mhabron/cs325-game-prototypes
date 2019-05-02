@@ -34,11 +34,15 @@ GameStates.makeGame = function( game, shared ) {
 	var boss;
 	var bossActive = false;
 	var boss_health = 8;
-	var boss_direction = left;
+	var boss_direction = 'left';
 	
 	var enemy1;
 	var enemy2;
 	var enemy3;
+	
+	var enemy1Jumping = false;
+	var enemy2Jumping = false;
+	var enemy3Jumping = false;
 	
 	var stars;
 	var starBullet;
@@ -83,6 +87,23 @@ GameStates.makeGame = function( game, shared ) {
 		}
 		else{
 			player.reset(enemy.x - 15, enemy.y - 10);
+			health--;
+		}
+	}
+	function starHitsBoss(thrown_star, boss) {
+		thrown_star.kill();
+		if(boss_health > 0) {
+			boss_health--;
+		}
+	}
+	function bossPlayerCollision(player, boss) {
+		if (isAttacking) {
+			if(boss_health > 0) {
+				boss_health--;
+			}
+		}
+		else{
+			player.reset(boss.x- 15, boss.y - 10);
 			health--;
 		}
 	}
@@ -163,34 +184,23 @@ GameStates.makeGame = function( game, shared ) {
 			player_health_bar.frame = 0;
 			player_health_bar.fixedToCamera = true;
 			
-			
 			boss = game.add.sprite('enemy_sprite', 3392, 704);
-			boss.animations.add('idle_right', [0,1,2,3], 12, true);
-			boss.animations.add('idle_left', [78,79,80,81], 12, true);
-			
-			boss.animations.add('jump_right', [15,16,17,18,19,20,21,22,23], 12, false);
-			boss.animations.add('jump_left', [82,83,84,85,86,87,88,89,90], 12, false);
-
-			boss.animations.add('right', [8,9,10,11,12,13], 12, true);
-			boss.animations.add('left', [72,73,74,75,76,77], 12, true);
-			
-			boss.animations.add('death', [59,60,61,62,63,64,65,66,67,68], 12, false);
-			
-			
-			boss.animations.add('attack_right', [42,43,44,45,46,47,48], 12);
-			boss.animations.add('attack_left', [91,92,93,94,95,96,97], 12);
 			
 			boss_health_bar = game.add.sprite('player_health',736, 200);
 			boss_health_bar.frame = 0;
 			boss_health_bar.fixedToCamera = true;
 			
 			game.physics.arcade.enable(player);
+			game.physics.arcade.enable(boss);
 			game.physics.arcade.enable(sword);
 			game.physics.arcade.enable(throwing_star);
 			game.physics.arcade.enable(goal_post);
 			
 			player.body.gravity.y = 2000;
 			player.body.setSize(17, 29, 10, 7);
+			
+			boss.body.gravity.y = 2000;
+			boss.body.setSize(17, 29, 10, 7);
 			
 			player.animations.add('idle_right', [0,1,2,3], 12, true);
 			player.animations.add('idle_left', [78,79,80,81], 12, true);
@@ -207,6 +217,24 @@ GameStates.makeGame = function( game, shared ) {
 			player.animations.add('attack_right', [42,43,44,45,46,47,48], 12);
 			player.animations.add('attack_left', [91,92,93,94,95,96,97], 12);
 			player.animations.play('idle_right');
+			
+			
+			boss.animations.add('idle_right', [0,1,2,3], 12, true);
+			boss.animations.add('idle_left', [78,79,80,81], 12, true);
+			
+			boss.animations.add('jump_right', [15,16,17,18,19,20,21,22,23], 12, false);
+			boss.animations.add('jump_left', [82,83,84,85,86,87,88,89,90], 12, false);
+
+			boss.animations.add('right', [8,9,10,11,12,13], 12, true);
+			boss.animations.add('left', [72,73,74,75,76,77], 12, true);
+			
+			boss.animations.add('death', [59,60,61,62,63,64,65,66,67,68], 12, false);
+			
+			
+			boss.animations.add('attack_right', [42,43,44,45,46,47,48], 12);
+			boss.animations.add('attack_left', [91,92,93,94,95,96,97], 12);
+			
+			boss.animations.play('idle_left');
 			player.checkWorldBounds = true;
 			player.events.onOutOfBounds.add(resetPlayer, this);
 			
@@ -236,23 +264,20 @@ GameStates.makeGame = function( game, shared ) {
 			enemy1 = enemies.getFirstExists(false);
 			enemy1.animations.add('cat_idle', [0,1,2,3], 5, true);
 			enemy1.animations.play('cat_idle');
-			enemy1.reset(2176, 538);
+			enemy1.reset(2176, 518);
 			enemy1.gravity.y = 2000;
-			enemy1.velocity.y = 800;
 			
 			enemy2 = enemies.getFirstExists(false);
 			enemy2.animations.add('cat_idle', [0,1,2,3], 5, true);
 			enemy2.animations.play('cat_idle');
-			enemy2.reset(1540, 526);
+			enemy2.reset(1540, 506);
 			enemy2.gravity.y = 2000;
-			enemy2.velocity.y = 800;
 			
 			enemy3 = enemies.getFirstExists(false);
 			enemy3.animations.add('cat_idle', [0,1,2,3], 5, true);
 			enemy3.animations.play('cat_idle');
-			enemy3.reset(832, 604);
+			enemy3.reset(832, 584);
 			enemy3.gravity.y = 2000;
-			enemy3.velocity.y = 800;
 			
         },
 		
@@ -316,11 +341,19 @@ GameStates.makeGame = function( game, shared ) {
 			if(health > 0) {
 				player_health_bar.frame = 8 - health;
 			}
+			
+			if(boss_health > 0) {
+				boss_health_bar.frame = 8 - boss_health;
+			}
 			game.physics.arcade.overlap(goal_post, player, player_gets_goal, null, this);
 			game.physics.arcade.overlap(throwing_star, player, player_gets_star, null, this);
 			game.physics.arcade.overlap(sword, player, player_gets_sword, null, this);
+			
 			game.physics.arcade.overlap(stars, enemies, starHitsEnemy, null, this);
 			game.physics.arcade.overlap(player, enemies, enemyPlayerCollision, null, this);
+			
+			game.physics.arcade.overlap(player, boss, bossPlayerCollision, null, this);
+			game.physics.arcade.overlap(stars, boss, starHitsBoss, null, this);
         }
     };
 };
