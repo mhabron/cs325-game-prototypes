@@ -31,8 +31,10 @@ GameStates.makeGame = function( game, shared ) {
 	var facing = 'right';
 	var canMove = true;
 	
+	var boss;
 	var bossActive = false;
 	var boss_health = 8;
+	var boss_direction = left;
 	
 	var enemy1;
 	var enemy2;
@@ -157,9 +159,30 @@ GameStates.makeGame = function( game, shared ) {
 			throwing_star = game.add.sprite(1336 ,676, 'throwing_star');
 			player = game.add.sprite(64, 576, 'player');
 			
-			player_health_bar = game.add.sprite(64, 200);
+			player_health_bar = game.add.sprite('player_health',64, 200);
 			player_health_bar.frame = 0;
 			player_health_bar.fixedToCamera = true;
+			
+			
+			boss = game.add.sprite('enemy_sprite', 3392, 704);
+			boss.animations.add('idle_right', [0,1,2,3], 12, true);
+			boss.animations.add('idle_left', [78,79,80,81], 12, true);
+			
+			boss.animations.add('jump_right', [15,16,17,18,19,20,21,22,23], 12, false);
+			boss.animations.add('jump_left', [82,83,84,85,86,87,88,89,90], 12, false);
+
+			boss.animations.add('right', [8,9,10,11,12,13], 12, true);
+			boss.animations.add('left', [72,73,74,75,76,77], 12, true);
+			
+			boss.animations.add('death', [59,60,61,62,63,64,65,66,67,68], 12, false);
+			
+			
+			boss.animations.add('attack_right', [42,43,44,45,46,47,48], 12);
+			boss.animations.add('attack_left', [91,92,93,94,95,96,97], 12);
+			
+			boss_health_bar = game.add.sprite('player_health',736, 200);
+			boss_health_bar.frame = 0;
+			boss_health_bar.fixedToCamera = true;
 			
 			game.physics.arcade.enable(player);
 			game.physics.arcade.enable(sword);

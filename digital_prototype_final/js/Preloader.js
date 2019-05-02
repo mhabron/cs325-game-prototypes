@@ -40,8 +40,9 @@ GameStates.makePreloader = function( game ) {
 			game.load.image('throwing_star', 'assets/throwing_star.png');
 			game.load.spritesheet('cat', 'assets/cat-enemy.png', 64, 64);
 			game.load.spritesheet('player_health', 'assets/player_health.png', 70, 48);
-			game.load.spritesheet('boss_health', 'assets/player_health.png', 70, 48);
+			game.load.spritesheet('boss_health', 'assets/boss_health.png', 70, 48);
 			game.load.spritesheet('cat', 'assets/cat-enemy.png', 64, 64);
+			game.load.spritesheet('boss', 'assets/enemy_sprite.png', 50, 37);
         },
     
         create: function () {
