@@ -12,6 +12,10 @@ GameStates.makeGame = function( game, shared ) {
 	var player;
 	var enemies;
 	var lives = 3;
+	var health = 8;
+	var player_health_bar;
+	
+	var boss_health_bar;
 	
 	var keys;
 	var attackButton;
@@ -24,6 +28,7 @@ GameStates.makeGame = function( game, shared ) {
 	var bulletTime = 0;
 	var isAttacking = false;
 	var facing = 'right';
+	var canMove = true;
 	
 	var enemy1;
 	var enemy2;
@@ -33,6 +38,7 @@ GameStates.makeGame = function( game, shared ) {
 	var starBullet;
 	
 	var jumpTimer = 0;
+	var spawnTimer = 0;
     
     function quitGame() {
 
@@ -40,7 +46,9 @@ GameStates.makeGame = function( game, shared ) {
         //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
 		player.kill();
 		goal_post.kill();
-		map.kill();
+		music.stop();
+		lives = 3;
+		health = 8;
 		hasSword = false;
 		hasRanged = false;
         //  Then let's go back to the main menu.
@@ -68,7 +76,8 @@ GameStates.makeGame = function( game, shared ) {
 			enemy.kill();
 		}
 		else{
-			player.reset(enemy.x - 10, enemy.y - 10);
+			player.reset(enemy.x - 15, enemy.y - 10);
+			health--;
 		}
 	}
 	function attack() {
@@ -89,11 +98,11 @@ GameStates.makeGame = function( game, shared ) {
 			starBullet = stars.getFirstExists(false);
 			if (starBullet) {
 				if(facing == 'right') {
-					starBullet.reset(player.x + 2, player.y + 8);
+					starBullet.reset(player.x + 2, player.y + 10);
 					starBullet.body.velocity.x = 400;
 				}
 				else {
-					starBullet.reset(player.x - 2, player.y + 8);
+					starBullet.reset(player.x - 2, player.y + 10);
 					starBullet.body.velocity.x = -400;
 				}
 				bulletTime = game.time.now + 400;
@@ -101,12 +110,19 @@ GameStates.makeGame = function( game, shared ) {
 		}
 	}
 	function resetPlayer() {
-		player.reset(64, 576);
-		if(lives > 1) {
-			lives--;
-		}
-		else{
-			quitGame();
+		music.stop();
+		canMove = false;
+		player.animations.play('death');
+		spawnTimer = game.time.now + 3000;
+		if (game.time.now > spawnTimer) {
+			if(lives > 1) {
+				lives--;
+				player.reset(64, 576);
+				health = 8;
+			}
+			else{
+				quitGame();
+			}	
 		}
 	}
     
@@ -132,6 +148,10 @@ GameStates.makeGame = function( game, shared ) {
 			sword = game.add.sprite(496, 560, 'sword');
 			throwing_star = game.add.sprite(1336 ,676, 'throwing_star');
 			player = game.add.sprite(64, 576, 'player');
+			player_health_bar = game.add.sprite(64, 200);
+			player_health_bar.frame = 0;
+			player_health_bar.fixedToCamera = true;
+			
 			game.physics.arcade.enable(player);
 			game.physics.arcade.enable(sword);
 			game.physics.arcade.enable(throwing_star);
@@ -148,6 +168,8 @@ GameStates.makeGame = function( game, shared ) {
 
 			player.animations.add('right', [8,9,10,11,12,13], 12, true);
 			player.animations.add('left', [72,73,74,75,76,77], 12, true);
+			
+			player.animations.add('death', [59,60,61,62,63,64,65,66,67,68], 12, false);
 			
 			
 			player.animations.add('attack_right', [42,43,44,45,46,47,48], 12);
@@ -183,16 +205,22 @@ GameStates.makeGame = function( game, shared ) {
 			enemy1.animations.add('cat_idle', [0,1,2,3], 5, true);
 			enemy1.animations.play('cat_idle');
 			enemy1.reset(2176, 538);
+			enemy1.gravity.y = 2000;
+			enemy1.velocity.y = 800;
 			
 			enemy2 = enemies.getFirstExists(false);
 			enemy2.animations.add('cat_idle', [0,1,2,3], 5, true);
 			enemy2.animations.play('cat_idle');
 			enemy2.reset(1540, 526);
+			enemy2.gravity.y = 2000;
+			enemy2.velocity.y = 800;
 			
 			enemy3 = enemies.getFirstExists(false);
 			enemy3.animations.add('cat_idle', [0,1,2,3], 5, true);
 			enemy3.animations.play('cat_idle');
-			enemy3.reset(832, 614);
+			enemy3.reset(832, 604);
+			enemy3.gravity.y = 2000;
+			enemy3.velocity.y = 800;
 			
         },
 		
@@ -249,6 +277,9 @@ GameStates.makeGame = function( game, shared ) {
 			}
 			if(attackButton.isDown && hasSword == true) {
 				attack();
+			}
+			if(health > 0) {
+				player_health_bar.frame = 8 - health;
 			}
 			game.physics.arcade.overlap(goal_post, player, player_gets_goal, null, this);
 			game.physics.arcade.overlap(throwing_star, player, player_gets_star, null, this);
