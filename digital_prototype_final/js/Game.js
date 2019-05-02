@@ -87,8 +87,14 @@ GameStates.makeGame = function( game, shared ) {
 		if (game.time.now > bulletTime) {
 			starBullet = stars.getFirstExists(false);
 			if (starBullet) {
-				starBullet.reset(player.x + 2, player.y + 8);
-				starBullet.body.velocity.x = 400;
+				if(facing == 'right') {
+					starBullet.reset(player.x + 2, player.y + 8);
+					starBullet.body.velocity.x = 400;
+				}
+				else {
+					starBullet.reset(player.x - 2, player.y + 8);
+					starBullet.body.velocity.x = -400;
+				}
 				bulletTime = game.time.now + 400;
 			}
 		}
@@ -194,7 +200,7 @@ GameStates.makeGame = function( game, shared ) {
             // This function returns the rotation angle that makes it visually match its
             // new trajectory.
 			game.physics.arcade.collide(player, groundLayer1);
-			if (keys.up.isDown && player.body.onFloor() == true && game.time.now > jumpTimer) {
+			if (keys.up.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
 				player.body.velocity.y = -700;
 				jumpTimer = game.time.now + 1200;
 				if (facing == 'left') {
@@ -204,7 +210,7 @@ GameStates.makeGame = function( game, shared ) {
 					player.animations.play('jump_right');
 				}
 			}
-			else if (keys.left.isDown) {
+			if (keys.left.isDown) {
 				player.body.velocity.x = -200;
 				facing = 'left';
 				if (player.body.onFloor() == true){
