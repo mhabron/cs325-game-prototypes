@@ -356,8 +356,20 @@ GameStates.makeGame = function( game, shared ) {
 			if(player.x == boss.x - 200 && player.body.onFloor() && bossActive == false) {
 				bossActive = true;
 			}
-			if(bossActive) {
-				
+			if(bossActive && bossAttackTimer > game.time.now) {
+				bossAttackTimer = game.time.now + 2000;
+				if (boss_direction == 'left') {
+					boss_direction = 'right';
+					boss.animations.play('attack_right');
+					boss.body.velocity.x = 300;
+					game.time.events.add(Phaser.Timer.SECOND * 1, function(){boss.body.velocity.x = 0, boss.animations.play('idle_right')}, this);
+				}
+				else if (boss_direction == 'right') {
+					boss_direction = 'left';
+					boss.animations.play('attack_left');
+					boss.body.velocity.x = -300;
+					game.time.events.add(Phaser.Timer.SECOND * 1, function(){boss.body.velocity.x = 0, boss.animations.play('idle_left')}, this);
+				}
 			}
 			if(boss_health > 0) {
 				boss_health_bar.frame = 8 - boss_health;
