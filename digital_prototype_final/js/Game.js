@@ -153,6 +153,9 @@ GameStates.makeGame = function( game, shared ) {
 				lives--;
 				player.reset(64, 576);
 				health = 8;
+				boss_health = 8;
+				boss_Active = false;
+				boss.reset(3392, 704);
 				canMove = true;
 				music.play();
 			}
@@ -356,7 +359,7 @@ GameStates.makeGame = function( game, shared ) {
 			if(player.x == boss.x - 200 && player.body.onFloor() && bossActive == false) {
 				bossActive = true;
 			}
-			if(bossActive && bossAttackTimer > game.time.now) {
+			if(bossActive && game.time.now > bossAttackTimer) {
 				bossAttackTimer = game.time.now + 2000;
 				if (boss_direction == 'left') {
 					boss_direction = 'right';
