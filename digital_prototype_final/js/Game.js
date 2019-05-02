@@ -7,6 +7,7 @@ GameStates.makeGame = function( game, shared ) {
 	var backgroundLayer1;
 	var groundLayer1;
 	var music;
+	var boss_music;
 	var death_sound;
 	
 	var goal_post;
@@ -164,7 +165,9 @@ GameStates.makeGame = function( game, shared ) {
 			map = game.add.tilemap('level1');
 			map.addTilesetImage('platformer_32_full', 'tiles');
 			music = game.add.audio('stage_music');
+			boss_music = game.add.audio('boss_music');
 			death_sound = game.add.audio('death_sound');
+			boss_music = true;
 			music.loop = true;
 			music.play();
 			
@@ -341,9 +344,16 @@ GameStates.makeGame = function( game, shared ) {
 			if(health > 0) {
 				player_health_bar.frame = 8 - health;
 			}
+			else {
+				resetPlayer();
+			}
 			
 			if(boss_health > 0) {
 				boss_health_bar.frame = 8 - boss_health;
+			}
+			else {
+				canMove = false;
+				boss.animations.play('death');
 			}
 			game.physics.arcade.overlap(goal_post, player, player_gets_goal, null, this);
 			game.physics.arcade.overlap(throwing_star, player, player_gets_star, null, this);

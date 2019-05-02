@@ -27,7 +27,8 @@ GameStates.makePreloader = function( game ) {
             game.load.atlas('playButton', 'assets/play_button.png', 'assets/play_button.json');
             game.load.audio('titleMusic', ['assets/Alice Maestra.mp3']);
 			game.load.audio('stage_music', 'assets/Dreamy pilot.mp3');
-			game.load.audioo('death_sound', 'assets/death_sound.mp3');
+			game.load.audio('death_sound', 'assets/death_sound.mp3');
+			game.load.audio('boss_music', 'assets/Maidens Capriccio.mp3');
             //	+ lots of other required assets here
             game.load.image( 'logo', 'assets/phaser.png' );
 			
