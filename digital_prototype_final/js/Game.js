@@ -114,13 +114,13 @@ GameStates.makeGame = function( game, shared ) {
 			sword = game.add.sprite(496, 560, 'sword');
 			throwing_star = game.add.sprite(1336 ,676, 'throwing_star');
 			player = game.add.sprite(64, 576, 'player');
-			player.body.setSize(17, 29, 10, 7);
 			game.physics.arcade.enable(player);
 			game.physics.arcade.enable(sword);
 			game.physics.arcade.enable(throwing_star);
 			game.physics.arcade.enable(goal_post);
 			
 			player.body.gravity.y = 2000;
+			player.body.setSize(17, 29, 10, 7);
 			
 			player.animations.add('idle_right', [0,1,2,3], 12, true);
 			player.animations.add('idle_left', [78,79,80,81], 12, true);
@@ -139,7 +139,6 @@ GameStates.makeGame = function( game, shared ) {
 			player.events.onOutOfBounds.add(resetPlayer, this);
 			
 			game.camera.follow(player);
-			
 			
 			stars = game.add.group();
 			stars.enableBody = true;
