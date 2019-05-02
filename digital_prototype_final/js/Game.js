@@ -6,6 +6,7 @@ GameStates.makeGame = function( game, shared ) {
 	var map;
 	var backgroundLayer1;
 	var groundLayer1;
+	var music;
 	
 	var goal_post;
 	var player;
@@ -103,6 +104,9 @@ GameStates.makeGame = function( game, shared ) {
 			game.stage.backgroundColor = '#a9f0ff';
 			map = game.add.tilemap('level1');
 			map.addTilesetImage('platformer_32_full', 'tiles');
+			music = game.add.audio('stage_music');
+			music.loop() = true;
+			music.play();
 			
 			backgroundLayer1 = map.createLayer('Background Layer');
 			groundLayer1 = map.createLayer('Ground Layer');
@@ -191,7 +195,7 @@ GameStates.makeGame = function( game, shared ) {
             // new trajectory.
 			game.physics.arcade.collide(player, groundLayer1);
 			if (keys.up.isDown && player.body.onFloor() == true && game.time.now > jumpTimer) {
-				player.body.velocity.y = -400;
+				player.body.velocity.y = -700;
 				jumpTimer = game.time.now + 1200;
 				if (facing == 'left') {
 					player.animations.play('jump_left');
